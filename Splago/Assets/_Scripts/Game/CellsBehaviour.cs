@@ -5,17 +5,18 @@ using Sirenix.OdinInspector;
 
 public class CellsBehaviour : MonoBehaviour
 {
-    private GridData gridData;
-    [ShowInInspector]
+    [ShowInInspector, ReadOnly]
     private int xPos;
-    [ShowInInspector]
+    [ShowInInspector, ReadOnly]
     private int yPos;
+    [ShowInInspector, ReadOnly]
+    private CellData gridData;
 
-    public void Init(GridData grid, int x, int y)
+    public void Init(int x, int y, CellData grid)
     {
-        gridData = grid;
         xPos = x;
         yPos = y;
+        gridData = grid;
     }
 
     public void PointerEnter()

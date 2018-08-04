@@ -4,22 +4,29 @@ using UnityEngine;
 using Sirenix.OdinInspector;
 using UnityEngine.UI;
 
-public class GridData : MonoBehaviour
+/// <summary>
+/// gère les datas & l'affichage de la grille
+/// </summary>
+public class GridManager : SingletonMono<GridManager>
 {
-    [OnValueChanged("InitGrid")]
-    public int sizeX = 10;
-    [OnValueChanged("InitGrid")]
-    public int sizeY = 10;
+    [Tooltip("taille X du tableau"), OnValueChanged("InitGrid"), SerializeField]
+    private int sizeX = 10;
+    [Tooltip("taille Y du tableau"), OnValueChanged("InitGrid"), SerializeField]
+    private int sizeY = 10;
 
-    public ushort[,] gridData;
+    private ushort[,] gridData;
+
     [ShowInInspector]
-    public GameObject[,] gridcells;
+    private GameObject[,] gridcells;
 
     public Transform grid;
     public GameObject gridCellPrefabs;
     public GridScalar gridScalar;
     public GridLayoutGroup gridLayout;
 
+    /// <summary>
+    /// permet d'initialiser la gille (les data & l'affichage)
+    /// </summary>
     [Button]
     public void InitGrid()
     {
@@ -37,7 +44,7 @@ public class GridData : MonoBehaviour
                 gridData[j, i] = 0;
                 gridcells[j, i] = Instantiate(gridCellPrefabs, grid);
                 CellsBehaviour cellBehave = gridcells[j, i].GetComponent<CellsBehaviour>();
-                cellBehave.Init(this, j, i);
+                cellBehave.Init(j, i, GridDatas.Instance.GetCellsByData(0));
             }
         }
 

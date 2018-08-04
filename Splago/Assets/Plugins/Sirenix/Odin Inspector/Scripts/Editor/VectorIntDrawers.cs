@@ -14,14 +14,15 @@ namespace Sirenix.OdinInspector.Editor.Drawers
     /// <summary>
     /// Vector2Int proprety drawer.
     /// </summary>
-    [OdinDrawer]
     public sealed class Vector2IntDrawer : OdinValueDrawer<Vector2Int>, IDefinesGenericMenuItems
     {
         /// <summary>
         /// Draws the property.
         /// </summary>
-        protected override void DrawPropertyLayout(IPropertyValueEntry<Vector2Int> entry, GUIContent label)
+        protected override void DrawPropertyLayout(GUIContent label)
         {
+            var entry = this.ValueEntry;
+
             GUILayout.BeginHorizontal();
 
             if (label != null)
@@ -81,14 +82,15 @@ namespace Sirenix.OdinInspector.Editor.Drawers
     /// <summary>
     /// Vector3Int property drawer.
     /// </summary>
-    [OdinDrawer]
     public sealed class Vector3IntDrawer : OdinValueDrawer<Vector3Int>, IDefinesGenericMenuItems
     {
         /// <summary>
         /// Draws the property.
         /// </summary>
-        protected override void DrawPropertyLayout(IPropertyValueEntry<Vector3Int> entry, GUIContent label)
+        protected override void DrawPropertyLayout(GUIContent label)
         {
+            var entry = this.ValueEntry;
+
             if (label == null)
             {
                 SirenixEditorGUI.BeginIndentedHorizontal(EditorGUI.indentLevel == 0 ? GUIStyle.none : SirenixGUIStyles.PropertyMargin);
@@ -140,7 +142,7 @@ namespace Sirenix.OdinInspector.Editor.Drawers
             {
                 genericMenu.AddSeparator("");
             }
-            
+
             genericMenu.AddItem(new GUIContent("Zero", "Set the vector to (0, 0, 0)"), value == Vector3Int.zero, () => SetVector(property, Vector3Int.zero));
             genericMenu.AddItem(new GUIContent("One", "Set the vector to (1, 1, 1)"), value == Vector3Int.one, () => SetVector(property, Vector3Int.one));
             genericMenu.AddSeparator("");
