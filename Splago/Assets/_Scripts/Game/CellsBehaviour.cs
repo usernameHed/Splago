@@ -2,9 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using UnityEngine.UI;
 
 public class CellsBehaviour : MonoBehaviour
 {
+    [SerializeField]
+    private Image image;
+
     [ShowInInspector, ReadOnly]
     private int xPos;
     [ShowInInspector, ReadOnly]
@@ -17,25 +21,39 @@ public class CellsBehaviour : MonoBehaviour
         xPos = x;
         yPos = y;
         gridData = grid;
+        image.sprite = grid.sprite;
+        image.color = grid.color;
     }
 
+    /// <summary>
+    /// called by eventTrigger on case
+    /// </summary>
     public void PointerEnter()
     {
-        Debug.Log("PointerEnter");
+        if (GridEditor.Instance.IsInEditor())
+        {
+            if (Input.GetMouseButton(0))
+                PointerClick();
+            else
+                GridEditor.Instance.OverCase(xPos, yPos, transform);
+        }            
+        else
+            GameLoop.Instance.OverCase(xPos, yPos, transform);
     }
 
     public void PointerExit()
     {
-        Debug.Log("PointerExit");
-    }
-
-    public void PointerUp()
-    {
-        Debug.Log("PointerUp");
+        if (GridEditor.Instance.IsInEditor())
+            GridEditor.Instance.OverExitCase(xPos, yPos);
+        else
+            GameLoop.Instance.OverExitCase(xPos, yPos);
     }
 
     public void PointerClick()
     {
-        Debug.Log("PointerClick");
+        if (GridEditor.Instance.IsInEditor())
+            GridEditor.Instance.ClickOnCase(xPos, yPos);
+        else
+            GameLoop.Instance.ClickOnCase(xPos, yPos);
     }
 }

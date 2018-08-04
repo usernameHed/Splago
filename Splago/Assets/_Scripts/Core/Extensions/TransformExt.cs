@@ -6,6 +6,12 @@ using UnityEngine;
 
 public static class TransformExt
 {
+    public static RectTransform ResetPos(this RectTransform transform)
+    {
+        transform.localPosition = Vector3.zero;
+        return (transform);
+    }
+
 	/// <summary>
 	/// Remove every childs in a transform
 	/// </summary>

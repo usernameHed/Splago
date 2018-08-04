@@ -41,18 +41,31 @@ public class GridManager : SingletonMono<GridManager>
         {
             for (int j = 0; j < gridData.GetLength(0); j++)
             {
+                /*
                 gridData[j, i] = 0;
                 gridcells[j, i] = Instantiate(gridCellPrefabs, grid);
                 CellsBehaviour cellBehave = gridcells[j, i].GetComponent<CellsBehaviour>();
                 cellBehave.Init(j, i, GridDatas.Instance.GetCellsByData(0));
+                */
+                gridcells[j, i] = Instantiate(gridCellPrefabs, grid);
+                FillCase(j, i, 0);
+
             }
         }
 
         gridScalar.Init(sizeX, sizeY);
     }
 
+    /// <summary>
+    /// here fill a case, and update his UI
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <param name="data"></param>
     public void FillCase(int x, int y, ushort data)
     {
-        gridData[y, x] = data;
+        gridData[x, y] = data;
+        CellsBehaviour cellBehave = gridcells[x, y].GetComponent<CellsBehaviour>();
+        cellBehave.Init(x, y, GridDatas.Instance.GetCellsByData(data));
     }
 }
