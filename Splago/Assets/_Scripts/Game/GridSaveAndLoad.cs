@@ -23,8 +23,12 @@ public class GridSaveAndLoad : MonoBehaviour
     private void Init()
     {
         Debug.Log("Init savedFiles");
-        savedFiles.Add("map0");
-        savedFiles.Add("map1");
+
+        //ici parcourt le dossier Resousrce/pathMaps avec la methode de zameran
+        ici;
+
+        //savedFiles.Add("map0");
+        //savedFiles.Add("map1");
 
         gridEditorUi.InitSavedMapDropDown(savedFiles);
     }
@@ -44,9 +48,12 @@ public class GridSaveAndLoad : MonoBehaviour
     public void Save(string nameFile)
     {
         Debug.Log("save");
-        savedFiles.Add(nameFile);
 
+        //ici save les courantes data dans le ficher nameFile (créé ou remplace)
+        ici;
 
+        if (!savedFiles.Contains(nameFile))
+            savedFiles.Add(nameFile);
         gridEditorUi.InitSavedMapDropDown(savedFiles);
     }
 
@@ -54,14 +61,19 @@ public class GridSaveAndLoad : MonoBehaviour
     public void Load(string nameFile)
     {
         Debug.Log("Load " + nameFile);
+
+        //ici load les donnée de nameFile dans les data courante
+        ici;
     }
 
     public void Delete() { Delete(gridEditorUi.fileToDelete); }
     public void Delete(string nameFile)
     {
         Debug.Log("delete");
-        savedFiles.Remove(nameFile);
+        //ici delete le fichier nameFile si il existe
+        ici;
 
+        savedFiles.Remove(nameFile);
         gridEditorUi.InitSavedMapDropDown(savedFiles);
     }
 

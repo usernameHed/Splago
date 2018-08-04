@@ -41,12 +41,7 @@ public class GridManager : SingletonMono<GridManager>
         {
             for (int j = 0; j < gridData.GetLength(0); j++)
             {
-                /*
-                gridData[j, i] = 0;
-                gridcells[j, i] = Instantiate(gridCellPrefabs, grid);
-                CellsBehaviour cellBehave = gridcells[j, i].GetComponent<CellsBehaviour>();
-                cellBehave.Init(j, i, GridDatas.Instance.GetCellsByData(0));
-                */
+
                 gridcells[j, i] = Instantiate(gridCellPrefabs, grid);
                 FillCase(j, i, 0);
 
