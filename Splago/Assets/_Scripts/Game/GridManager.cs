@@ -16,7 +16,8 @@ public class GridManager : SingletonMono<GridManager>
     private int sizeY = 10;
     public int SizeY { get { return (sizeY); } }
 
-    private ushort[,] gridData;
+    [HideInInspector]
+    public ushort[,] gridData;
 
     [SerializeField]
     private string mapToLoadAtStart = "map1";

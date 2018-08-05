@@ -27,9 +27,35 @@ public class GridDatas : SingletonMono<GridDatas>
 {
     [Tooltip("toute les case utilisable sont ici !")]
 	public List<CellData> cellsDatas = new List<CellData>();
+    [Tooltip("toute les case utilisable sont ici !")]
+    public List<CellData> cellsDatasPlayer = new List<CellData>();
+    [Tooltip("toute les case utilisable sont ici !")]
+    public List<CellData> cellsDatasBombes = new List<CellData>();
+    [Tooltip("toute les case utilisable sont ici !")]
+    public List<CellData> cellsDatasMisc = new List<CellData>();
+
 
     [Tooltip("les cases non savable, mais utilisable par le client")]
     public List<CellData> cellVisualMisc = new List<CellData>();
+
+    /// <summary>
+    /// get all list packed in one
+    /// </summary>
+    /// <returns></returns>
+    public List<CellData> GetackedData()
+    {
+        List<CellData> packed = new List<CellData>();
+        for (ushort i = 0; i < cellsDatas.Count; i++)
+            packed.Add(cellsDatas[i]);
+        for (ushort i = 0; i < cellsDatasPlayer.Count; i++)
+            packed.Add(cellsDatasPlayer[i]);
+        for (ushort i = 0; i < cellsDatasBombes.Count; i++)
+            packed.Add(cellsDatasBombes[i]);
+        for (ushort i = 0; i < cellsDatasMisc.Count; i++)
+            packed.Add(cellsDatasMisc[i]);
+
+        return (packed);
+    }
 
     /// <summary>
     /// here change every id
@@ -38,15 +64,59 @@ public class GridDatas : SingletonMono<GridDatas>
     [Button]
     private void SetIdOfData()
     {
-        List<CellData> oldSave = new List<CellData>(cellsDatas);
+        List<CellData> oldSave = new List<CellData>();
+        List<CellData> newSave = new List<CellData>();
         ushort index = 0;
         for (ushort i = 0; i < cellsDatas.Count; i++)
         {
+            oldSave.Add(cellsDatas[i]);
+
             CellData cell = cellsDatas[i];
             cell.id = index;
             cellsDatas[i] = cell;
+
+            newSave.Add(cell);
             index++;
         }
+        for (ushort i = 0; i < cellsDatasPlayer.Count; i++)
+        {
+            oldSave.Add(cellsDatasPlayer[i]);
+
+            CellData cell = cellsDatasPlayer[i];
+            cell.id = index;
+            cellsDatasPlayer[i] = cell;
+
+            newSave.Add(cell);
+            index++;
+        }
+        for (ushort i = 0; i < cellsDatasBombes.Count; i++)
+        {
+            oldSave.Add(cellsDatasBombes[i]);
+
+            CellData cell = cellsDatasBombes[i];
+            cell.id = index;
+            cellsDatasBombes[i] = cell;
+
+            newSave.Add(cell);
+            index++;
+        }
+        for (ushort i = 0; i < cellsDatasMisc.Count; i++)
+        {
+            oldSave.Add(cellsDatasMisc[i]);
+
+            CellData cell = cellsDatasMisc[i];
+            cell.id = index;
+            cellsDatasMisc[i] = cell;
+
+            newSave.Add(cell);
+            index++;
+        }
+
+        //reset loaded map
+        GridEditor.Instance.DataGridChanged(oldSave, newSave);
+
+
+        ////////////ici misc client
         //ushort index = 0;
         for (ushort i = 0; i < cellVisualMisc.Count; i++)
         {
@@ -55,8 +125,6 @@ public class GridDatas : SingletonMono<GridDatas>
             cellVisualMisc[i] = cell;
             index++;
         }
-        //reset loaded map
-        GridEditor.Instance.DataGridChanged(oldSave, cellsDatas);
     }
 
     /// <summary>
@@ -71,6 +139,22 @@ public class GridDatas : SingletonMono<GridDatas>
             if (idUnique == cellsDatas[i].id)
                 return (cellsDatas[i]);
         }
+        for (int i = 0; i < cellsDatasPlayer.Count; i++)
+        {
+            if (idUnique == cellsDatasPlayer[i].id)
+                return (cellsDatasPlayer[i]);
+        }
+        for (int i = 0; i < cellsDatasBombes.Count; i++)
+        {
+            if (idUnique == cellsDatasBombes[i].id)
+                return (cellsDatasBombes[i]);
+        }
+        for (int i = 0; i < cellsDatasMisc.Count; i++)
+        {
+            if (idUnique == cellsDatasMisc[i].id)
+                return (cellsDatasMisc[i]);
+        }
+
         Debug.LogWarning("Cell not found !");
         return (cellsDatas[0]);
     }

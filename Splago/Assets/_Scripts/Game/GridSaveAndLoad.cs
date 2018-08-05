@@ -24,7 +24,7 @@ public class GridSaveAndLoad : MonoBehaviour
     /// init the savedFiles List
     /// </summary>
     [Button]
-    private void Init()
+    public void Init()
     {
         Debug.Log("Init savedFiles");
         savedFiles.Clear();
@@ -130,7 +130,7 @@ public class GridSaveAndLoad : MonoBehaviour
                     string[] lineDatas = s.Split(' ');
                     for (int i = 0; i < lineDatas.Length; i++)
                     {
-                        Debug.Log(lineDatas[i]);
+                        //Debug.Log(lineDatas[i]);
                         gridData[i, index - 1] = (ushort)(lineDatas[i].ToInt(0));
                     }
                 }

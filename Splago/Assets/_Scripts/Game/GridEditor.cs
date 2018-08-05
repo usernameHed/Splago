@@ -116,7 +116,62 @@ public class GridEditor : SingletonMono<GridEditor>
     /// <param name="newDatas">new data</param>
     public void DataGridChanged(List<CellData> oldSave, List<CellData> newDatas)
     {
+        return;
+
+        string tmpFile = "[DataChange]tmp";
+
+        Debug.Log("first, init the grid (in case of inspector)");
+        GridManager.Instance.InitGrid();
+
+        Debug.Log("first create a tmp DataChangetmp");
+        gridSaveAndLoad.Save(tmpFile);
+
+        Debug.Log("then init the fills saved");
+        gridSaveAndLoad.Init(); //load les fichier
         Debug.Log("here change the saved map with new id data !");
+        for (int k = 0; k < gridSaveAndLoad.savedFiles.Count; k++)
+        {
+            //load un fichier...
+            Debug.Log("load: " + gridSaveAndLoad.savedFiles[k]);
+
+            gridSaveAndLoad.Load(gridSaveAndLoad.savedFiles[k]);
+            for (int i = 0; i < GridManager.Instance.gridData.GetLength(1); i++)
+            {
+                for (int j = 0; j < GridManager.Instance.gridData.GetLength(0); j++)
+                {
+                    if (GridManager.Instance.gridData[j, i] == 0)
+                        continue;
+                    
+                    for (int m = 0; m < oldSave.Count; m++)
+                    {
+                        if (GridManager.Instance.gridData[j, i] == oldSave[m].id)
+                        {
+                            GridManager.Instance.gridData[j, i] = newDatas[m].id;
+                        }
+                    }
+                }
+            }
+            Debug.Log("gridSaveAndLoad.savedFiles[k]" + gridSaveAndLoad.savedFiles[k]);
+            //si on est à la fin, on est sur [DataChange]tmp
+            // (le dernier ajouté dans la liste, le supprimer
+            /*if (k + 1 >= gridSaveAndLoad.savedFiles.Count)
+            {
+                Debug.Log("Delete last: " + gridSaveAndLoad.savedFiles[k]);
+                gridSaveAndLoad.Delete(gridSaveAndLoad.savedFiles[k]);
+            }                
+            else
+            {
+                Debug.Log("save again: " + gridSaveAndLoad.savedFiles[k]);
+                gridSaveAndLoad.Save(gridSaveAndLoad.savedFiles[k]);
+            }*/
+            Debug.Log("save again: " + gridSaveAndLoad.savedFiles[k]);
+            gridSaveAndLoad.Save(gridSaveAndLoad.savedFiles[k]);
+        }
+
+        Debug.Log("ok, now laod, and delete tmp");
+        gridSaveAndLoad.Load(tmpFile);
+        gridSaveAndLoad.Delete(tmpFile);
+
         gridEditorUi.InitDropDown();
     }
 }

@@ -24,7 +24,7 @@ public class GridEditorUI : MonoBehaviour
 
     public void ActiveDevMod(bool active) { UiDevMod.SetActive(active); }
 
-    public string saveInput = "map0";   public void SetSaveInput(string name) { saveInput = name; } public InputField inputSave;
+    public string saveInput = "default";   public void SetSaveInput(string name) { saveInput = name; } public InputField inputSave;
     [ReadOnly]
     public string fileToLoad = "";
     [ReadOnly]
@@ -38,9 +38,11 @@ public class GridEditorUI : MonoBehaviour
         ActiveDevMod(GridEditor.Instance.IsInEditor());
         dropDown.options.Clear();
         List<string> optionDropDown = new List<string>();
-        for (int i = 0; i < GridDatas.Instance.cellsDatas.Count; i++)
+
+        List<CellData> cellDataToLoop = GridDatas.Instance.GetackedData();
+        for (int i = 0; i < cellDataToLoop.Count; i++)
         {
-            optionDropDown.Add(GridDatas.Instance.cellsDatas[i].name);
+            optionDropDown.Add(cellDataToLoop[i].name);
         }
         dropDown.AddOptions(optionDropDown);
     }
