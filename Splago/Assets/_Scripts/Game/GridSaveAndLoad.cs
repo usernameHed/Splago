@@ -1,11 +1,15 @@
 ﻿using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GridSaveAndLoad : MonoBehaviour
 {
-    public string pathMaps = "";
+    public string editorPath = "Assets/Resources";
+    public string pathMaps = "Maps";
+    public string extentionFile = "txt";
     public List<string> savedFiles = new List<string>();
 
     [SerializeField]
@@ -23,12 +27,25 @@ public class GridSaveAndLoad : MonoBehaviour
     private void Init()
     {
         Debug.Log("Init savedFiles");
+        savedFiles.Clear();
 
         //ici parcourt le dossier Resousrce/pathMaps avec la methode de zameran
-        ici;
+        var pathSavedMaps = $"{pathMaps}/";
 
-        //savedFiles.Add("map0");
-        //savedFiles.Add("map1");
+        Debug.Log(pathSavedMaps);
+        var sprites = Resources.LoadAll(pathSavedMaps);
+        Debug.Log(sprites);
+        Debug.Log(sprites.Length);
+        int indexMaps = 0;
+        foreach (var sprite in sprites)
+        {
+            
+            string nameSprite = sprite.name;
+            Debug.Log(nameSprite);
+
+            savedFiles.Add(nameSprite);
+            indexMaps++;
+        }
 
         gridEditorUi.InitSavedMapDropDown(savedFiles);
     }
@@ -47,13 +64,29 @@ public class GridSaveAndLoad : MonoBehaviour
     public void Save() { Save(gridEditorUi.saveInput); }
     public void Save(string nameFile)
     {
-        Debug.Log("save");
+        Debug.Log("save (not in runtime !)");
+        
 
         //ici save les courantes data dans le ficher nameFile (créé ou remplace)
-        ici;
+        var pathSavedMaps = $"{editorPath}/{pathMaps}/{nameFile}.{extentionFile}";
+        using (StreamWriter writer =
+        new StreamWriter(pathSavedMaps))
+        {
+            //writer.Write("Word ");
+            int sizeX = GridManager.Instance.SizeX;
+            int sizeY = GridManager.Instance.SizeY;
+            writer.WriteLine(sizeX + " " + sizeY);
+            writer.WriteLine(GridManager.Instance.GetAllDataToString());
+        }
 
-        if (!savedFiles.Contains(nameFile))
+        if (savedFiles.Contains(nameFile))
+        {
+            Debug.Log("witing into existing files");
+        }
+        else
             savedFiles.Add(nameFile);
+
+
         gridEditorUi.InitSavedMapDropDown(savedFiles);
     }
 
@@ -61,17 +94,56 @@ public class GridSaveAndLoad : MonoBehaviour
     public void Load(string nameFile)
     {
         Debug.Log("Load " + nameFile);
-
+        var pathSavedMaps = $"{editorPath}/{pathMaps}/{nameFile}.{extentionFile}";
         //ici load les donnée de nameFile dans les data courante
-        ici;
+        string dataToLoad = "";
+
+        int sizeXData = 0;
+        int sizeYData = 0;
+        ushort[,] gridData = new ushort[0, 0];
+
+        int index = 0;
+        using (StreamReader sr = File.OpenText(pathSavedMaps))
+        {
+            string s = "";
+
+            while ((s = sr.ReadLine()) != null)
+            {
+
+                dataToLoad += s + "\n";
+                if (index == 0)
+                {
+                    string [] sizes = s.Split(' ');
+                    sizeXData = sizes[0].ToInt(0);
+                    sizeYData = sizes[1].ToInt(0);
+
+                    gridData = new ushort[sizeXData, sizeYData];
+                }
+                else
+                {
+                    string[] lineDatas = s.Split(' ');
+                    for (int i = 0; i < lineDatas.Length; i++)
+                    {
+                        Debug.Log(lineDatas[i]);
+                        gridData[i, index - 1] = (ushort)(lineDatas[i].ToInt(0));
+                    }
+                }
+
+                index++;
+            }
+        }
+        GridManager.Instance.LoadNewGrid(sizeXData, sizeYData, gridData);
+        Debug.Log(dataToLoad);
     }
 
     public void Delete() { Delete(gridEditorUi.fileToDelete); }
     public void Delete(string nameFile)
     {
-        Debug.Log("delete");
+        Debug.Log("delete" + nameFile);
         //ici delete le fichier nameFile si il existe
-        ici;
+        //ici;
+        var pathSavedMaps = $"{editorPath}/{pathMaps}/{nameFile}.{extentionFile}";
+        File.Delete(pathSavedMaps);
 
         savedFiles.Remove(nameFile);
         gridEditorUi.InitSavedMapDropDown(savedFiles);
