@@ -63,8 +63,14 @@ public class GridEditor : SingletonMono<GridEditor>
     {
         GridManager.Instance.InitGrid();
         gridEditorUi.ActiveDevMod(true);
+    }
 
-
+    /// <summary>
+    /// here exlicitly clear the grid
+    /// </summary>
+    public void ClearGrid()
+    {
+        GridManager.Instance.ClearGrid();
     }
 
     /// <summary>

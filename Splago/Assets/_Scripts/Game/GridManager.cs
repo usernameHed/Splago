@@ -18,6 +18,12 @@ public class GridManager : SingletonMono<GridManager>
 
     private ushort[,] gridData;
 
+    [SerializeField]
+    private string mapToLoadAtStart = "map1";
+
+    [SerializeField]
+    private GridSaveAndLoad gridSaveAndLoad;
+
     [ShowInInspector]
     private GameObject[,] gridcells;
 
@@ -34,6 +40,16 @@ public class GridManager : SingletonMono<GridManager>
     {
         gridData = new ushort[sizeX, sizeY];
 
+        if (!gridSaveAndLoad.Load(mapToLoadAtStart))
+            LoadNewGrid(sizeX, sizeY, gridData);
+    }
+
+    /// <summary>
+    /// clear the grid !
+    /// </summary>
+    public void ClearGrid()
+    {
+        gridData = new ushort[sizeX, sizeY];
         LoadNewGrid(sizeX, sizeY, gridData);
     }
 

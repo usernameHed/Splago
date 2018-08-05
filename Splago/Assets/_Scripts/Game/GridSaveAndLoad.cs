@@ -92,15 +92,17 @@ public class GridSaveAndLoad : MonoBehaviour
     }
 
     public void Load() { Load(gridEditorUi.fileToLoad); }
-    public void Load(string nameFile)
+    public bool Load(string nameFile)
     {
         Debug.Log("Load " + nameFile);
         if (string.IsNullOrEmpty(nameFile))
-            return;
+            return (false);
 
         var pathSavedMaps = $"{editorPath}/{pathMaps}/{nameFile}.{extentionFile}";
         //ici load les donnée de nameFile dans les data courante
-        string dataToLoad = "";
+        //string dataToLoad = "";
+        if (!File.Exists(pathSavedMaps))
+            return (false);
 
         int sizeXData = 0;
         int sizeYData = 0;
@@ -114,7 +116,7 @@ public class GridSaveAndLoad : MonoBehaviour
             while ((s = sr.ReadLine()) != null)
             {
 
-                dataToLoad += s + "\n";
+                //dataToLoad += s + "\n";
                 if (index == 0)
                 {
                     string [] sizes = s.Split(' ');
@@ -137,24 +139,29 @@ public class GridSaveAndLoad : MonoBehaviour
             }
         }
         GridManager.Instance.LoadNewGrid(sizeXData, sizeYData, gridData);
-        Debug.Log(dataToLoad);
+        //Debug.Log(dataToLoad);
+        return (true);
     }
 
     public void Delete() { Delete(gridEditorUi.fileToDelete); }
-    public void Delete(string nameFile)
+    public bool Delete(string nameFile)
     {
         Debug.Log("delete" + nameFile);
         if (string.IsNullOrEmpty(nameFile))
-            return;
+            return (false);
         //ici delete le fichier nameFile si il existe
         //ici;
         var pathSavedMaps = $"{editorPath}/{pathMaps}/{nameFile}.{extentionFile}";
+        if (!File.Exists(pathSavedMaps))
+            return (false);
+
         File.Delete(pathSavedMaps);
 
         savedFiles.Remove(nameFile);
 
 
         gridEditorUi.InitSavedMapDropDown(savedFiles);
+        return (true);
     }
 
 }
