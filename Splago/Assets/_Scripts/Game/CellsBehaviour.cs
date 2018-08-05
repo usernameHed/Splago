@@ -44,7 +44,11 @@ public class CellsBehaviour : MonoBehaviour
     public void PointerExit()
     {
         if (GridEditor.Instance.IsInEditor())
+        {
+            if (Input.GetMouseButton(0))
+                PointerClick();
             GridEditor.Instance.OverExitCase(xPos, yPos);
+        }            
         else
             GameLoop.Instance.OverExitCase(xPos, yPos);
     }

@@ -56,7 +56,7 @@ public class GridEditorUI : MonoBehaviour
         dropDownSaveAndLoadDelete.AddOptions(savedMaps);
 
         fileToLoad = GridEditor.Instance.gridSaveAndLoad.GetSavedFileName(dropDownSaveAndLoad.value);
-        fileToDelete = GridEditor.Instance.gridSaveAndLoad.GetSavedFileName(dropDownSaveAndLoad.value);
+        fileToDelete = GridEditor.Instance.gridSaveAndLoad.GetSavedFileName(dropDownSaveAndLoadDelete.value);
     }
     /// <summary>
     /// caled when dropDown change

@@ -80,7 +80,7 @@ public class GridEditor : SingletonMono<GridEditor>
     /// </summary>
     public void OverCase(int x, int y, Transform parent)
     {
-        Debug.Log("[editor] over " + x + ", " + y);
+        //Debug.Log("[editor] over " + x + ", " + y);
         
         cursorEditor.transform.SetParent(parent);
         cursorEditor.GetComponent<RectTransform>().ResetPos();
@@ -88,7 +88,7 @@ public class GridEditor : SingletonMono<GridEditor>
     }
     public void OverExitCase(int x, int y)
     {
-        Debug.Log("[editor] over " + x + ", " + y);
+        //Debug.Log("[editor] over " + x + ", " + y);
         cursorEditor.SetActive(false);
         cursorEditor.transform.SetParent(transform);
     }

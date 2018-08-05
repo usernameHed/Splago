@@ -65,7 +65,8 @@ public class GridSaveAndLoad : MonoBehaviour
     public void Save(string nameFile)
     {
         Debug.Log("save (not in runtime !)");
-        
+        if (string.IsNullOrEmpty(nameFile))
+            return;
 
         //ici save les courantes data dans le ficher nameFile (créé ou remplace)
         var pathSavedMaps = $"{editorPath}/{pathMaps}/{nameFile}.{extentionFile}";
@@ -94,6 +95,9 @@ public class GridSaveAndLoad : MonoBehaviour
     public void Load(string nameFile)
     {
         Debug.Log("Load " + nameFile);
+        if (string.IsNullOrEmpty(nameFile))
+            return;
+
         var pathSavedMaps = $"{editorPath}/{pathMaps}/{nameFile}.{extentionFile}";
         //ici load les donnée de nameFile dans les data courante
         string dataToLoad = "";
@@ -140,12 +144,16 @@ public class GridSaveAndLoad : MonoBehaviour
     public void Delete(string nameFile)
     {
         Debug.Log("delete" + nameFile);
+        if (string.IsNullOrEmpty(nameFile))
+            return;
         //ici delete le fichier nameFile si il existe
         //ici;
         var pathSavedMaps = $"{editorPath}/{pathMaps}/{nameFile}.{extentionFile}";
         File.Delete(pathSavedMaps);
 
         savedFiles.Remove(nameFile);
+
+
         gridEditorUi.InitSavedMapDropDown(savedFiles);
     }
 

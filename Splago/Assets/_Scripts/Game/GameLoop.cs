@@ -20,7 +20,7 @@ public class GameLoop : SingletonMono<GameLoop>
     /// </summary>
     public void OverCase(int x, int y, Transform parent)
     {
-        Debug.Log("[game] over " + x + ", " + y);
+        //Debug.Log("[game] over " + x + ", " + y);
         
         cursorPlayer.transform.SetParent(parent);
         cursorPlayer.GetComponent<RectTransform>().ResetPos();
@@ -28,7 +28,7 @@ public class GameLoop : SingletonMono<GameLoop>
     }
     public void OverExitCase(int x, int y)
     {
-        Debug.Log("[game] over " + x + ", " + y);
+        //Debug.Log("[game] over " + x + ", " + y);
         cursorPlayer.SetActive(false);
         cursorPlayer.transform.SetParent(transform);
     }
