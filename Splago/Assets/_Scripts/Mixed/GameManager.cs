@@ -32,6 +32,11 @@ public class GameManager : SingletonMono<GameManager>
     private Camera cameraMain;
     public Camera CameraMain { get { return (cameraMain); } }
 
+
+    [FoldoutGroup("Scenes"), Tooltip("liens du levelManager"), SerializeField]
+    private SceneManagerLocal sceneManagerLocal;
+    public SceneManagerLocal SceneManagerLocal { set { sceneManagerLocal = value; InitNewScene(); } get { return (sceneManagerLocal); } }
+
     #endregion
 
     #region Initialization
