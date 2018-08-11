@@ -5,8 +5,10 @@ using System;
 using Sirenix.Serialization;
 
 /// <summary>
-/// GameManager Description
+/// GameManager
 /// </summary>
+[TypeInfoBox("Global GameManager (entire project)")]
+[TypeInfoBox("Has link to Camera, SceneManager")]
 public class GameManager : SingletonMono<GameManager>
 {
     #region Attributes

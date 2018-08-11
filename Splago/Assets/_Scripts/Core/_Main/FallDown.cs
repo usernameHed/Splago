@@ -2,6 +2,7 @@
 using Sirenix.OdinInspector;
 using UnityEngine.Networking;
 
+[TypeInfoBox("FallDown an rigidbody object")]
 public class FallDown : MonoBehaviour
 {
     #region variable

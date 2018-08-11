@@ -6,8 +6,12 @@ using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.UI;
 
+[TypeInfoBox("Used to draw custom map, save & load")]
 public class GridEditor : SingletonMono<GridEditor>
 {
+    [SerializeField]
+    private GameObject ButtonActiveEditor;
+
     [SerializeField]
     private GridEditorUI gridEditorUi;
     
@@ -23,18 +27,15 @@ public class GridEditor : SingletonMono<GridEditor>
     private ushort idToChange;
     public void SetIdUsh(int ush) { idToChange = (ushort)ush; }
 
-    [SerializeField]
-    private GameObject cursorEditor;
-
-    private void Start()
+    public void Init()
     {
-        cursorEditor.SetActive(false);
+        ButtonActiveEditor.SetActive(true);
 
         activeEdition = false;
         SetEditorMode();
         gridEditorUi.InitDropDown();
+        gridSaveAndLoad.Init();
     }
-
     
 
     /// <summary>
@@ -45,12 +46,13 @@ public class GridEditor : SingletonMono<GridEditor>
         if (activeEdition)
         {
             Debug.Log("editor mode");
+            GameLoop.Instance.cursor.Init(CursorGrid.CursorEnum.InEditor);
             InitNewMap();
-            
-        }            
+        }
         else
         {
             Debug.Log("no more editor mode");
+            GameLoop.Instance.InitMisc();
             gridEditorUi.ActiveDevMod(false);
         }
     }
@@ -84,20 +86,13 @@ public class GridEditor : SingletonMono<GridEditor>
     /// <summary>
     /// the player is over this case
     /// </summary>
-    public void OverCase(int x, int y, Transform parent)
+    public void HoverCase(int x, int y, CellsBehaviour cell, bool hover)
     {
         //Debug.Log("[editor] over " + x + ", " + y);
-        
-        cursorEditor.transform.SetParent(parent);
-        cursorEditor.GetComponent<RectTransform>().ResetPos();
-        cursorEditor.SetActive(true);
+
+        GameLoop.Instance.cursor.OverCase(cell, hover);
     }
-    public void OverExitCase(int x, int y)
-    {
-        //Debug.Log("[editor] over " + x + ", " + y);
-        cursorEditor.SetActive(false);
-        cursorEditor.transform.SetParent(transform);
-    }
+
     /// <summary>
     /// the player clic on this case
     /// </summary>
@@ -174,4 +169,6 @@ public class GridEditor : SingletonMono<GridEditor>
 
         gridEditorUi.InitDropDown();
     }
+
+    
 }

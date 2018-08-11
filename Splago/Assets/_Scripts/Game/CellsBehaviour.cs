@@ -4,10 +4,12 @@ using UnityEngine;
 using Sirenix.OdinInspector;
 using UnityEngine.UI;
 
+[TypeInfoBox("Behavior of a cell")]
 public class CellsBehaviour : MonoBehaviour
 {
     [SerializeField]
     private Image image;
+    public Transform GetParentCursor() { return (transform); }
 
     [ShowInInspector, ReadOnly]
     private int xPos;
@@ -35,10 +37,10 @@ public class CellsBehaviour : MonoBehaviour
             if (Input.GetMouseButton(0))
                 PointerClick();
             else
-                GridEditor.Instance.OverCase(xPos, yPos, transform);
+                GridEditor.Instance.HoverCase(xPos, yPos, this, true);
         }            
         else
-            GameLoop.Instance.OverCase(xPos, yPos, transform);
+            GameLoop.Instance.HoverCase(xPos, yPos, this, true);
     }
 
     public void PointerExit()
@@ -47,10 +49,10 @@ public class CellsBehaviour : MonoBehaviour
         {
             if (Input.GetMouseButton(0))
                 PointerClick();
-            GridEditor.Instance.OverExitCase(xPos, yPos);
+            GridEditor.Instance.HoverCase(xPos, yPos, this, false);
         }            
         else
-            GameLoop.Instance.OverExitCase(xPos, yPos);
+            GameLoop.Instance.HoverCase(xPos, yPos, this, false);
     }
 
     public void PointerClick()

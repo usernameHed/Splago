@@ -20,9 +20,7 @@ public struct CellData
     public Color color;
 }
 
-/// <summary>
-/// contient la liste de touts les cases utilisables
-/// </summary>
+[TypeInfoBox("Contain data of all cells")]
 public class GridDatas : SingletonMono<GridDatas>
 {
     [Tooltip("toute les case utilisable sont ici !")]

@@ -4,6 +4,7 @@ using Sirenix.OdinInspector;
 /// <summary>
 /// TimeManager Description
 /// </summary>
+[TypeInfoBox("Handler time, slow motion")]
 public class TimeManager : SingletonMono<TimeManager>
 {
     protected TimeManager() { } // guarantee this will be always a singleton only - can't use the constructor!
@@ -24,7 +25,6 @@ public class TimeManager : SingletonMono<TimeManager>
     {
         //This Prevents slow motion in Game Editor.
         originalFixedDeltaTime = Time.fixedDeltaTime;
-
     }
     #endregion
 

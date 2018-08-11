@@ -708,6 +708,11 @@
             <param name="relativePath">A relative path from parent path to path. <c>null</c> if no relative path could be made.</param>
             <returns>A value indicating if the method succeeded in making a relative path.</returns>
         </member>
+        <member name="M:Sirenix.Utilities.PathUtilities.Combine(System.String,System.String)">
+            <summary>
+            Combines two paths, and replaces all backslases with forward slash.
+            </summary>
+        </member>
         <member name="T:Sirenix.Utilities.PropertyInfoExtensions">
             <summary>
             PropertyInfo method extensions.

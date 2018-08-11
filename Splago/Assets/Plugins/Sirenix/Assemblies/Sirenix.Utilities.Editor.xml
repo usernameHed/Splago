@@ -2416,7 +2416,20 @@
         </member>
         <member name="P:Sirenix.Utilities.Editor.GUIHelper.ContextWidth">
             <summary>
-            Gets the current editor gui context width.
+            Gets the current editor gui context width. Only set these if you know what it does.
+            </summary>
+        </member>
+        <member name="P:Sirenix.Utilities.Editor.GUIHelper.BetterLabelWidth">
+            <summary>
+            Unity EditorGUIUtility.labelWidth only works reliablly in Repaint events.
+            BetterLabelWidth does a better job at giving you the correct LabelWidth in non-repaint events.
+            </summary>
+        </member>
+        <member name="P:Sirenix.Utilities.Editor.GUIHelper.BetterContextWidth">
+            <summary>
+            Odin will set this for you whenever an Odin property tree is drawn.
+            But if you're using BetterLabelWidth and BetterContextWidth without Odin, then 
+            you need to set BetterContextWidth in the beginning of each GUIEvent.
             </summary>
         </member>
         <member name="P:Sirenix.Utilities.Editor.GUIHelper.CurrentIndentAmount">
@@ -2494,6 +2507,12 @@
             <returns>The measured rect.</returns>
         </member>
         <member name="M:Sirenix.Utilities.Editor.GUIHelper.GetCurrentLayoutRect">
+            <summary>
+            Gets the current layout rect.
+            </summary>
+            <returns>The current layout rect.</returns>
+        </member>
+        <member name="M:Sirenix.Utilities.Editor.GUIHelper.GetCurrentLayoutStyle">
             <summary>
             Gets the current layout rect.
             </summary>
@@ -4584,6 +4603,11 @@
             <param name="useBackslashes">If <c>true</c> the path will be enforced to use backslashes. Otherwise the path will be enforced to use forward slashes.</param>
             <param name="options">Layout options.</param>
             <returns>A path to a folder.</returns>
+        </member>
+        <member name="M:Sirenix.Utilities.Editor.SirenixEditorFields.VectorPrefixSlideRect(UnityEngine.Rect,UnityEngine.Vector4)">
+            <summary>
+            Draws a prefix label for a vector field, that implements label dragging.
+            </summary>
         </member>
         <member name="M:Sirenix.Utilities.Editor.SirenixEditorFields.VectorPrefixLabel(UnityEngine.Rect@,UnityEngine.GUIContent,UnityEngine.Vector4)">
             <summary>
@@ -7054,6 +7078,11 @@
         <member name="P:Sirenix.Utilities.Editor.SirenixGUIStyles.BottomBoxPadding">
             <summary>
             Gets the bottom box padding.
+            </summary>
+        </member>
+        <member name="P:Sirenix.Utilities.Editor.SirenixGUIStyles.PaneOptions">
+            <summary>
+            Unitys PaneOptions GUIStyle.
             </summary>
         </member>
         <member name="F:Sirenix.Utilities.Editor.SirenixGUIStyles.Temporary">

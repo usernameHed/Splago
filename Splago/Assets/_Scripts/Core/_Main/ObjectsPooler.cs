@@ -5,6 +5,7 @@ using UnityEngine;
 /// <summary>
 /// ObjectsPooler Description
 /// </summary>
+[TypeInfoBox("Pool of object")]
 public class ObjectsPooler : SingletonMono<ObjectsPooler>
 {
     protected ObjectsPooler() { } // guarantee this will be always a singleton only - can't use the constructor!
@@ -60,7 +61,7 @@ public class ObjectsPooler : SingletonMono<ObjectsPooler>
     /// ici désactive tout les éléments de la pool qui sont actuellement activé...
     /// Appeler une fonction spécial ??
     /// </summary>
-    public void desactiveEveryOneForTransition()
+    public void DesactiveEveryOneForTransition()
     {
         foreach (KeyValuePair<GameData.PoolTag, List<GameObject>> attachStat in poolDictionary)
         {

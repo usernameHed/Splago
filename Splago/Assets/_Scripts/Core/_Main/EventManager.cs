@@ -17,7 +17,13 @@ public class DataEventManager
 
 /// <summary>
 /// EventManager Description
+/// 
+/// use:
+/// OnEnable: EventManager.Instance.StartListening(GameData.Event.GameOver, <myFunction>);
+/// OnDisable: EventManager.Instance.StopListening(GameData.Event.GameOver, <myFunction>);
+/// Trigger the event: EventManager.Instance.TriggerEvent(GameData.Event.GameOver);
 /// </summary>
+[TypeInfoBox("Global Event manager: StartListening, StopListening, TriggerEvent")]
 public class EventManager : SingletonMono<EventManager>
 {
     protected EventManager() { } // guarantee this will be always a singleton only - can't use the constructor!

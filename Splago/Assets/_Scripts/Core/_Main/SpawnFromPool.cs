@@ -6,6 +6,7 @@ using System.Collections.Generic;
 /// <summary>
 /// SpawnFromPool Description
 /// </summary>
+[TypeInfoBox("Spawn a lot of object from pool")]
 public class SpawnFromPool : MonoBehaviour
 {
     #region Attributes

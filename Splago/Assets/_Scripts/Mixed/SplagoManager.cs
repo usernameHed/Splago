@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[TypeInfoBox("[ILevelManager] Manage Splago Scene behaviour")]
 public class SplagoManager : MonoBehaviour, ILevelManager
 {
     public void InitScene()

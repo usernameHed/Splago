@@ -7,6 +7,7 @@ using UnityEngine.UI;
 /// <summary>
 /// gère les datas & l'affichage de la grille
 /// </summary>
+[TypeInfoBox("Manager creation of grid")]
 public class GridManager : SingletonMono<GridManager>
 {
     [Tooltip("taille X du tableau"), OnValueChanged("InitGrid"), SerializeField]
@@ -40,6 +41,7 @@ public class GridManager : SingletonMono<GridManager>
     public void InitGrid()
     {
         gridData = new ushort[sizeX, sizeY];
+        gridSaveAndLoad.Init();
 
         if (!gridSaveAndLoad.Load(mapToLoadAtStart))
             LoadNewGrid(sizeX, sizeY, gridData);

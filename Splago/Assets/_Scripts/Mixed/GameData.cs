@@ -12,13 +12,8 @@ public static class GameData
 
     public enum Event
     {
-        PlayerDeath,    //est appelé a chaque playerDeath
-        GameOver,       //est appelé quand on trigger un gameOver
-        GamePadConnectionChange,    //est appelé a chaque co/deco de manette
-        AdditiveJustFinishLoad, //event du sceneManager
-        TryToEnd,
-
-        Grounded,       //appelé quand le joueur est en collision avec quelque chose
+        GameOver,
+        AdditiveJustFinishLoad, //used by SceneManagerGlobal
     };
 
     public enum Prefabs

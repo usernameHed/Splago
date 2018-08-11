@@ -5,6 +5,7 @@ using UnityEngine;
 /// <summary>
 /// Kill any IKillable instance on contact
 /// <summary>
+[TypeInfoBox("Kill Trigger")]
 public class KillTrigger : MonoBehaviour
 {
     #region Attributes
@@ -37,11 +38,6 @@ public class KillTrigger : MonoBehaviour
 		if (killOnExit)
 		{
 			TryKill (other.gameObject);
-            /*
-             * PlayerController playerController = other.GetComponent<PlayerController>();
-                    if (playerController)
-                    EventManager.TriggerEvent(GameData.Event.TryToEnd);
-             * */
         }
     }
 

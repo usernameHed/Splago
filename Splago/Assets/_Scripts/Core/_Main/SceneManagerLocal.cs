@@ -9,6 +9,7 @@ using System;
 /// <summary>
 /// MenuManager Description
 /// </summary>
+[TypeInfoBox("Have this localized in a scene, permit to define the scene transition next/previous, with option")]
 public class SceneManagerLocal : MonoBehaviour
 {
     //[SerializeField]
@@ -160,7 +161,7 @@ public class SceneManagerLocal : MonoBehaviour
         if (unloadFirst)
             SceneManagerGlobal.Instance.UnloadScene(sceneToLoad[0].scene);
 
-        ObjectsPooler.Instance.desactiveEveryOneForTransition();
+        ObjectsPooler.Instance.DesactiveEveryOneForTransition();
         //ObjectsPoolerLocal.Instance.desactiveEveryOneForTransition();
 
         SceneManagerGlobal.Instance.JumpToScene(sceneToLoad[1].scene, sceneToLoad[1].fade, sceneToLoad[1].fadeTime);    //hard code du previous ?
@@ -177,7 +178,7 @@ public class SceneManagerLocal : MonoBehaviour
         if (unloadFirst)
             SceneManagerGlobal.Instance.UnloadScene(sceneToLoad[0].scene);
 
-        ObjectsPooler.Instance.desactiveEveryOneForTransition();
+        ObjectsPooler.Instance.DesactiveEveryOneForTransition();
         //ObjectsPoolerLocal.Instance.desactiveEveryOneForTransition();
 
         SceneManagerGlobal.Instance.JumpToScene(sceneToLoad[index].scene, sceneToLoad[index].fade, sceneToLoad[index].fadeTime);    //hard code du previous ?

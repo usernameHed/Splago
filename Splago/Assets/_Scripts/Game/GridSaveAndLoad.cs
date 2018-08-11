@@ -15,11 +15,6 @@ public class GridSaveAndLoad : MonoBehaviour
     [SerializeField]
     private GridEditorUI gridEditorUi;
 
-    private void Start()
-    {
-        Init();
-    }
-
     /// <summary>
     /// init the savedFiles List
     /// </summary>
@@ -32,16 +27,16 @@ public class GridSaveAndLoad : MonoBehaviour
         //ici parcourt le dossier Resousrce/pathMaps avec la methode de zameran
         var pathSavedMaps = $"{pathMaps}/";
 
-        Debug.Log(pathSavedMaps);
+        //Debug.Log(pathSavedMaps);
         var sprites = Resources.LoadAll(pathSavedMaps);
-        Debug.Log(sprites);
-        Debug.Log(sprites.Length);
+        //Debug.Log(sprites);
+        //Debug.Log(sprites.Length);
         int indexMaps = 0;
         foreach (var sprite in sprites)
         {
             
             string nameSprite = sprite.name;
-            Debug.Log(nameSprite);
+            //Debug.Log(nameSprite);
 
             savedFiles.Add(nameSprite);
             indexMaps++;

@@ -5,6 +5,7 @@
 // Copyright (c) Sirenix IVS. All rights reserved.
 // </copyright>
 //-----------------------------------------------------------------------
+
 namespace Sirenix.OdinInspector.Editor.Drawers
 {
     using Utilities.Editor;
@@ -21,30 +22,24 @@ namespace Sirenix.OdinInspector.Editor.Drawers
         /// </summary>
         protected override void DrawPropertyLayout(GUIContent label)
         {
-            var entry = this.ValueEntry;
-
-            GUILayout.BeginHorizontal();
-
-            if (label != null)
+            Rect labelRect;
+            var contentRect = SirenixEditorGUI.BeginHorizontalPropertyLayout(label, out labelRect);
             {
                 EditorGUI.BeginChangeCheck();
-                var value = SirenixEditorFields.VectorPrefixLabel(label, (Vector2)entry.SmartValue);
+                var val = SirenixEditorFields.VectorPrefixSlideRect(labelRect, (Vector2)this.ValueEntry.SmartValue);
                 if (EditorGUI.EndChangeCheck())
                 {
-                    entry.SmartValue = new Vector2Int((int)value.x, (int)value.y);
+                    this.ValueEntry.SmartValue = new Vector2Int((int)val.x, (int)val.y);
                 }
+
+                var showLabels = SirenixEditorFields.ResponsiveVectorComponentFields && contentRect.width >= 185;
+                GUIHelper.PushLabelWidth(SirenixEditorFields.SingleLetterStructLabelWidth);
+                this.ValueEntry.Property.Children[0].Draw(showLabels ? GUIHelper.TempContent("X") : null);
+                this.ValueEntry.Property.Children[1].Draw(showLabels ? GUIHelper.TempContent("Y") : null);
+                GUIHelper.PopLabelWidth();
+
             }
-
-            var r = GUIHelper.GetCurrentLayoutRect();
-            bool showLabels = !(SirenixEditorFields.ResponsiveVectorComponentFields && (label != null ? r.width - EditorGUIUtility.labelWidth : r.width) < 185);
-
-            GUIHelper.PushLabelWidth(SirenixEditorFields.SingleLetterStructLabelWidth);
-            GUIHelper.PushIndentLevel(0);
-            entry.Property.Children[0].Draw(showLabels ? GUIHelper.TempContent("X") : null);
-            entry.Property.Children[1].Draw(showLabels ? GUIHelper.TempContent("Y") : null);
-            GUIHelper.PopIndentLevel();
-            GUIHelper.PopLabelWidth();
-            GUILayout.EndHorizontal();
+            SirenixEditorGUI.EndHorizontalPropertyLayout();
         }
 
         /// <summary>
@@ -89,46 +84,25 @@ namespace Sirenix.OdinInspector.Editor.Drawers
         /// </summary>
         protected override void DrawPropertyLayout(GUIContent label)
         {
-            var entry = this.ValueEntry;
-
-            if (label == null)
-            {
-                SirenixEditorGUI.BeginIndentedHorizontal(EditorGUI.indentLevel == 0 ? GUIStyle.none : SirenixGUIStyles.PropertyMargin);
-            }
-            else
-            {
-                GUILayout.BeginHorizontal();
-            }
-
-            if (label != null)
+            Rect labelRect;
+            var contentRect = SirenixEditorGUI.BeginHorizontalPropertyLayout(label, out labelRect);
             {
                 EditorGUI.BeginChangeCheck();
-                var value = SirenixEditorFields.VectorPrefixLabel(label, (Vector3)entry.SmartValue);
+                var val = SirenixEditorFields.VectorPrefixSlideRect(labelRect, (Vector3)this.ValueEntry.SmartValue);
                 if (EditorGUI.EndChangeCheck())
                 {
-                    entry.SmartValue = new Vector3Int((int)value.x, (int)value.y, (int)value.z);
+                    this.ValueEntry.SmartValue = new Vector3Int((int)val.x, (int)val.y, (int)val.z);
                 }
-            }
 
-            var r = GUIHelper.GetCurrentLayoutRect();
-            bool showLabels = !(SirenixEditorFields.ResponsiveVectorComponentFields && (label != null ? r.width - EditorGUIUtility.labelWidth : r.width) < 185);
+                var showLabels = SirenixEditorFields.ResponsiveVectorComponentFields && contentRect.width >= 185;
+                GUIHelper.PushLabelWidth(SirenixEditorFields.SingleLetterStructLabelWidth);
+                this.ValueEntry.Property.Children[0].Draw(showLabels ? GUIHelper.TempContent("X") : null);
+                this.ValueEntry.Property.Children[1].Draw(showLabels ? GUIHelper.TempContent("Y") : null);
+                this.ValueEntry.Property.Children[2].Draw(showLabels ? GUIHelper.TempContent("Z") : null);
+                GUIHelper.PopLabelWidth();
 
-            GUIHelper.PushLabelWidth(SirenixEditorFields.SingleLetterStructLabelWidth);
-            GUIHelper.PushIndentLevel(0);
-            entry.Property.Children[0].Draw(showLabels ? GUIHelper.TempContent("X") : null);
-            entry.Property.Children[1].Draw(showLabels ? GUIHelper.TempContent("Y") : null);
-            entry.Property.Children[2].Draw(showLabels ? GUIHelper.TempContent("Z") : null);
-            GUIHelper.PopIndentLevel();
-            GUIHelper.PopLabelWidth();
-
-            if (label == null)
-            {
-                SirenixEditorGUI.EndIndentedHorizontal();
             }
-            else
-            {
-                GUILayout.EndHorizontal();
-            }
+            SirenixEditorGUI.EndHorizontalPropertyLayout();
         }
 
         /// <summary>

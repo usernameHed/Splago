@@ -12,10 +12,16 @@ public static class TransformExt
         return (transform);
     }
 
-	/// <summary>
-	/// Remove every childs in a transform
-	/// </summary>
-	public static Transform ClearChild(this Transform transform)
+    public static RectTransform ResetScale(this RectTransform transform)
+    {
+        transform.localScale = Vector3.one;
+        return (transform);
+    }
+
+    /// <summary>
+    /// Remove every childs in a transform
+    /// </summary>
+    public static Transform ClearChild(this Transform transform)
 	{
         if (Application.isPlaying)
         {
@@ -45,6 +51,16 @@ public static class TransformExt
         return (transform);
     }
 
+    public static Transform ActiveAllChild(this Transform transform, bool active, Transform exeption = null)
+    {
+        foreach (Transform child in transform)
+        {
+            if (exeption && child == exeption)
+                child.gameObject.SetActive(!active);
+            child.gameObject.SetActive(active);
+        }
+        return (transform);
+    }
     //Even though they are used like normal methods, extension
     //methods must be declared static. Notice that the first
     //parameter has the 'this' keyword followed by a Transform

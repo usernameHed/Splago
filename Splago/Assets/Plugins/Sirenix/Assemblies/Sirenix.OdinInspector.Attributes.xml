@@ -1484,7 +1484,7 @@
         </member>
         <member name="F:Sirenix.OdinInspector.TableListAttribute.MinScrollViewHeight">
             <summary>
-            The number of pixels before a scroll view appears. 150 by default.
+            The number of pixels before a scroll view appears. 350 by default.
             </summary>
         </member>
         <member name="F:Sirenix.OdinInspector.TableListAttribute.MaxScrollViewHeight">
@@ -1495,6 +1495,11 @@
         <member name="F:Sirenix.OdinInspector.TableListAttribute.AlwaysExpanded">
             <summary>
             If true, expanding and collapsing the table from the table title-bar is no longer an option.
+            </summary>
+        </member>
+        <member name="F:Sirenix.OdinInspector.TableListAttribute.HideToolbar">
+            <summary>
+            Whether to hide the toolbar containing the add button and pagin etc.s
             </summary>
         </member>
         <member name="F:Sirenix.OdinInspector.TableListAttribute.CellPadding">
@@ -1619,25 +1624,6 @@
             If true, no row indices drawn.
             </summary>
         </member>
-        <member name="T:Sirenix.OdinInspector.TagSelectorAttribute">
-            <summary>
-            <para>The TagSelector attribute draws a dropdown selector for string properties to select tags from.</para>
-            <para>Use this to provide an easy way for users to select a tag from the inspector.</para>
-            </summary>
-            <example>
-            <para>The following example demonstrates the use of the TagSelector attribute.</para>
-            <code>
-            public class MyComponent : MonoBehaviour
-            {
-                [TagSelector]
-                public string MyTag;
-            }
-            </code>
-            </example>
-            <seealso cref="T:Sirenix.OdinInspector.ValueDropdownAttribute"/>
-            <seealso cref="T:Sirenix.OdinInspector.AssetListAttribute"/>
-            <seealso cref="!:SceneAssetAttribute"/>
-        </member>
         <member name="F:Sirenix.OdinInspector.TypeFilterAttribute.MemberName">
             <summary>
             Name of any field, property or method member that implements IList. E.g. arrays or Lists.
@@ -1759,7 +1745,8 @@
         </member>
         <member name="T:Sirenix.OdinInspector.IncludeMyAttributesAttribute">
             <summary>
-            Not yet documented.
+            When this attribute is added is added to another attribute, then attributes from that attribute
+            will also be added to the property in the attribute processing step.
             </summary>
         </member>
         <member name="T:Sirenix.OdinInspector.InlineEditorObjectFieldModes">
@@ -3455,7 +3442,7 @@
                      this.SomeList.Add(new MyType());
                  }
              }
-             #end if
+             #endif
              </code>
              </example>
              <remarks>
