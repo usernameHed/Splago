@@ -7,9 +7,14 @@ using UnityEngine;
 [TypeInfoBox("[ILevelManager] Manage Splago Scene behaviour")]
 public class SplagoManager : MonoBehaviour, ILevelManager
 {
+    public GameObject UIWorld;
+    public GameObject canvasPortrait;
+    public GameObject canvasLandscape;
+
     public void InitScene()
     {
         Debug.Log("Init splago scene");
+        UILandscape.Instance.Init(canvasPortrait, canvasLandscape, UIWorld);
         GameLoop.Instance.Init();
     }
 

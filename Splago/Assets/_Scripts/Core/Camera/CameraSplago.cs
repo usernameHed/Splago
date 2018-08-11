@@ -7,12 +7,16 @@ using Sirenix.OdinInspector;
 /// Smoothly move camera to m_DesiredPosition
 /// m_DesiredPosition is the barycenter of target list
 /// </summary>
-public class CameraController : MonoBehaviour
+public class CameraSplago : MonoBehaviour
 {
     #region Attributes
     public GameObject worldCanvasPos;
 
     public Vector3 setAverageTmp = Vector3.zero;
+    public float speedDezoom = 1;
+
+    private bool isZooming = false;
+    private bool isDezooming = false;
 
     // Time before next camera move
     [FoldoutGroup("GamePlay"), Tooltip("Le smooth de la caméra"), SerializeField]
@@ -48,43 +52,13 @@ public class CameraController : MonoBehaviour
         }
     }
 
-    [FoldoutGroup("GamePlay"), Tooltip("le zoom minimum de la camera"), SerializeField]
-    private float minZoom = 4.0f;
-
-    [FoldoutGroup("GamePlay"), Tooltip("le zoom maximum de la camera (default)"), SerializeField]
-    private float maxZoom = 15.0f;
-
-    // Zoom applied with only one target
-    [FoldoutGroup("GamePlay"), Tooltip("Zoom appliqué lorsqu'il y a une seul target"), SerializeField]
-    private float defaultZoom = 6.0f;
-
     // Target approximation threshold
     [FoldoutGroup("GamePlay"), Tooltip("Approximation: la caméra est-elle sur sa cible ?"), SerializeField]
     private float focusThreshold = 0f;
 
-    // Border margin before unzoom
-    [FoldoutGroup("GamePlay"), Tooltip("Border margin de l'axe Z du zoom"), SerializeField]
-    private float borderMargin = 4f;
-
-    //Fallback target if target list is empty
-    [FoldoutGroup("GamePlay"), Space(10), Tooltip("objet que la caméra doit focus s'il n'y a plus de target"), SerializeField]
-    private Transform fallBackTarget;
-
-    [FoldoutGroup("GamePlay"), Space(10), Tooltip("En combien de temps la caméra se décide à focus le fallBack lors du game over......"), SerializeField]
-    private float timeBeforeFallBack = 1f;
-
-    [FoldoutGroup("GamePlay"), Space(10), Tooltip("En combien de temps la caméra se décide à focus le fallBack lors du game over......"), SerializeField]
-    private float smoothTimeWhenFallBack = 1f;
-
-
     //Target list
     [FoldoutGroup("Debug"), Tooltip("list de target"), SerializeField]
-    private List<CameraTarget> targetList = new List<CameraTarget>();
-    [FoldoutGroup("Debug"), Tooltip("Des que c'est vrai, la camera focus la cameraTarget quand elle n'a plus de cible"), SerializeField]
-    private bool fallBack = false;
-
-	public float offset = 1; //Rajoute par guilaume pour décentrer la caméra sur y :)
-
+    private List<IsOnCamera> targetList = new List<IsOnCamera>();
     [SerializeField]
 	private FrequencyTimer updateTimer;
 
@@ -100,10 +74,6 @@ public class CameraController : MonoBehaviour
     #endregion
 
     #region Init
-    private void OnEnable()
-    {
-        EventManager.StartListening(GameData.Event.GameOver, GameOver);
-    }
 
     private void Start()
     {
@@ -126,26 +96,11 @@ public class CameraController : MonoBehaviour
     #endregion
 
     #region Core
-    /// <summary>
-    /// fonction appelé lorsque la partie est fini
-    /// </summary>
-    private void GameOver()
-    {
-        Invoke("FallBack", timeBeforeFallBack);
-    }
-
-    private void FallBack()
-    {
-        fallBack = true;
-        ClearTarget();
-        smoothTime = smoothTimeWhenFallBack;
-        Debug.Log("la camera bouge au fallback !");
-    }
 
     /// <summary>
     /// Add target to camera
     /// </summary>
-    public void AddTarget(CameraTarget other)
+    public void AddTarget(IsOnCamera other)
     {
 		// Check object is not already a target
         if (targetList.IndexOf(other) < 0)
@@ -158,7 +113,7 @@ public class CameraController : MonoBehaviour
     /// <summary>
     /// Remove target from target list
     /// </summary>
-	public void RemoveTarget(CameraTarget other)
+	public void RemoveTarget(IsOnCamera other)
     {
         for (int i = 0; i < targetList.Count; i++)
         {
@@ -196,67 +151,30 @@ public class CameraController : MonoBehaviour
     /// </summary>
     private void FindAveragePosition()
     {
-        /*
-		// Final position
-        Vector3 averagePos = new Vector3();
-		int activeTargetAmount = 0;
-        float minX = 0; 
-        float maxX = 0;
-        float minY = 0;
-        float maxY = 0;
-
-        // For each target
+        bool dezoom = false;
         for (int i = 0; i < targetList.Count; i++)
         {
-			CameraTarget target = targetList[i];
-
-			// Check target is active
-			if (!target || !target.gameObject.activeSelf)
-			{
-				continue;
-			}
-
-			// Set first target as min max position
-            if (i == 0)
+            if (!targetList[i].isOnScreen)
             {
-                minX = maxX = target.transform.position.x;
-                minY = maxY = target.transform.position.y;
+                dezoom = true;
+                break;
             }
-            else
-            {
-				// Extends min max bounds
-                minX = (target.transform.position.x < minX) ? target.transform.position.x : minX;
-                maxX = (target.transform.position.x > maxX) ? target.transform.position.x : maxX;
-                minY = (target.transform.position.y < minY) ? target.transform.position.y : minY;
-                maxY = (target.transform.position.y > maxY) ? target.transform.position.y : maxY;
-            }
-				
-            activeTargetAmount++;
         }
-
-        // Find middle point for all targets
-        if (activeTargetAmount > 0)
+        bool tooInside = true;
+        for (int i = 0; i < targetList.Count; i++)
         {
-            averagePos.x = (minX + maxX) / 2.0F;
-            averagePos.y = (minY + maxY) / 2.0F;
-        }
-
-        // If no targets, select fallback focus
-        if (targetList.Count == 0)
-        {
-            if (fallBackTarget && fallBack)
+            if (!targetList[i].IsTooMuchInside)
             {
-                averagePos = fallBackTarget.position;
+                tooInside = false;
+                break;
             }
         }
 
-        // Calculate zoom
-        float dist = Mathf.Max(Mathf.Abs(maxX - minX), Mathf.Abs(maxY - minY));
-        averagePos.z = (targetList.Count > 1) ? -Mathf.Min(Mathf.Max(minZoom, dist + borderMargin), maxZoom) : -defaultZoom;
+        if (dezoom && !tooInside)
+            setAverageTmp.z -= speedDezoom;
+        else if (tooInside)
+            setAverageTmp.z += speedDezoom;
 
-        // Change camera target
-		averageTargetPosition = averagePos + new Vector3(0,offset,0);
-        */
         averageTargetPosition = setAverageTmp;
     }
 
@@ -286,7 +204,7 @@ public class CameraController : MonoBehaviour
     /// </summary>
     private void SetFreez()
     {
-        freezeCamera = targetList.Count == 0 && ((fallBackTarget && !fallBack) || fallBackTarget == null);
+        freezeCamera = (targetList.Count == 0);
     }
 
     #endregion
@@ -313,7 +231,7 @@ public class CameraController : MonoBehaviour
     /// <summary>
     /// Smoothly move camera toward averageTargetPosition
     /// </summary>
-    private void FixedUpdate()
+    private void LateUpdate()
     {
         if (freezeCamera || HasReachedTargetPosition())
         {
@@ -323,11 +241,6 @@ public class CameraController : MonoBehaviour
         // Move to desired position
         transform.position = Vector3.SmoothDamp(transform.position, averageTargetPosition, ref currentVelocity, smoothTime);
         //posLisener = transform.position;    //change listenerPosition
-    }
-
-    private void OnDisable()
-    {
-        EventManager.StopListening(GameData.Event.GameOver, GameOver);
     }
     #endregion
 }

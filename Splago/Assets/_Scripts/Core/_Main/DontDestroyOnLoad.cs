@@ -30,7 +30,7 @@ public class DontDestroyOnLoad : MonoBehaviour
             DontDestroyOnLoad(this);
         }            
         else if (instance != this)
-            Destroy(gameObject);
+            DestroyImmediate(gameObject);
     }
 
     private void Awake()

@@ -113,7 +113,7 @@ public class ObjectiveIndicator : MonoBehaviour
     private Image linkedImage;
     private RectTransform linkedImageTrans;
 
-    private CameraController cc;
+    private CameraSplago cc;
 
     private float currentScale;
     private bool animateScale = false;
@@ -157,7 +157,7 @@ public class ObjectiveIndicator : MonoBehaviour
     {
         if (!camMain)
             return;
-        cc = camMain.transform.gameObject.GetComponent<CameraController>();
+        cc = camMain.transform.gameObject.GetComponent<CameraSplago>();
 
         if (usedCanvas == null)
         {

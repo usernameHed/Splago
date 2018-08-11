@@ -7,7 +7,13 @@ using UnityEngine.UI;
 /// <summary>
 public class IsOnCamera : MonoBehaviour
 {
-	[SerializeField]
+    [SerializeField]
+    private bool onEnableAdd = true;
+
+    [SerializeField]
+    private bool onDisableRemove = true;
+
+    [SerializeField]
 	private FrequencyTimer updateTimer = new FrequencyTimer(1.0F);
 
 	[SerializeField]
@@ -16,7 +22,13 @@ public class IsOnCamera : MonoBehaviour
 	[SerializeField]
 	private float yMargin;
 
+    [ReadOnly]
 	public bool isOnScreen = false;
+    [ReadOnly]
+    public bool IsTooMuchInside = false;
+
+
+    public float interneBorder = 0.2f;
 
     [ShowInInspector, ReadOnly]
     private Image objectRendererUI;
@@ -25,6 +37,9 @@ public class IsOnCamera : MonoBehaviour
 
     [ShowInInspector, ReadOnly]
     private Camera cam;
+
+    [SerializeField]
+    private CameraSplago cameraController;
 
     private Vector3 bounds;
 
@@ -51,28 +66,67 @@ public class IsOnCamera : MonoBehaviour
 	/// <summary>
 	/// Check object is on screen
 	/// <summary>
-	bool CheckOnCamera()
+	private void CheckOnCamera()
 	{
 		if (!cam || (objectRendererUI == null && objectRenderer == null))
 		{
             TryToGetCam();
             if (!cam || (objectRendererUI == null && objectRenderer == null))
-                return false;
+                return;
 		}
 
 		Vector3 bottomCorner = cam.WorldToViewportPoint(gameObject.transform.position - bounds);
 		Vector3 topCorner = cam.WorldToViewportPoint(gameObject.transform.position + bounds);
-        //Debug.Log("checkBorder");
-		return (topCorner.x >= -xMargin && bottomCorner.x <= 1 + xMargin && topCorner.y >= -yMargin && bottomCorner.y <= 1 + yMargin);
-	}
 
-	// Unity functions
+        
+        isOnScreen = (topCorner.x >= -xMargin && bottomCorner.x <= 1 + xMargin && topCorner.y >= -yMargin && bottomCorner.y <= 1 + yMargin);
+        IsTooMuchInside = (topCorner.x >= -interneBorder && bottomCorner.x <= 1 + interneBorder && topCorner.y >= -interneBorder && bottomCorner.y <= 1 + interneBorder);
+
+    }
+
+
+    public void AddTarget()
+    {
+        cameraController.AddTarget(this);
+    }
+
+    public void RemoveTarget()
+    {
+        if (cameraController)
+        {
+            cameraController.RemoveTarget(this);
+        }
+    }
+
+    // Unity functions
+    private void OnEnable()
+    {
+        if (onEnableAdd)
+        {
+            AddTarget();
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (onDisableRemove)
+        {
+            RemoveTarget();
+        }
+    }
+
+    private void OnDestroy()
+    {
+        RemoveTarget();
+    }
+
+    // Unity functions
 
     private void Update()
     {
 		if (updateTimer.Ready())
         {
-			isOnScreen = CheckOnCamera();
+			CheckOnCamera();
         }
     }
 	#endregion
