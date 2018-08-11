@@ -10,6 +10,9 @@ using Sirenix.OdinInspector;
 public class CameraController : MonoBehaviour
 {
     #region Attributes
+    public GameObject worldCanvasPos;
+
+    public Vector3 setAverageTmp = Vector3.zero;
 
     // Time before next camera move
     [FoldoutGroup("GamePlay"), Tooltip("Le smooth de la caméra"), SerializeField]
@@ -109,6 +112,9 @@ public class CameraController : MonoBehaviour
 
     private void InitCamera()
     {
+        Vector3 posWorld = worldCanvasPos.transform.position;
+        setAverageTmp = new Vector3(posWorld.x, posWorld.y, setAverageTmp.z);
+
         CancelInvoke("FallBack");
         if (holdSmooth == 0)
             holdSmooth = smoothTime;
@@ -190,6 +196,7 @@ public class CameraController : MonoBehaviour
     /// </summary>
     private void FindAveragePosition()
     {
+        /*
 		// Final position
         Vector3 averagePos = new Vector3();
 		int activeTargetAmount = 0;
@@ -249,6 +256,8 @@ public class CameraController : MonoBehaviour
 
         // Change camera target
 		averageTargetPosition = averagePos + new Vector3(0,offset,0);
+        */
+        averageTargetPosition = setAverageTmp;
     }
 
     /// <summary>

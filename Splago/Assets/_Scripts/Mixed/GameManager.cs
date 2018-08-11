@@ -53,7 +53,16 @@ public class GameManager : SingletonMono<GameManager>
     /// </summary>
     private void InitNewScene()
     {
+        if (sceneManagerLocal.LevelManagerScript == null)
+        {
+            Debug.LogError("no ILevelManager ??");
+        }
+        //init la caméra de la scene...
+        cameraObject = sceneManagerLocal.CameraObject;
         SetCamera(cameraObject);
+
+        //init le level...
+        sceneManagerLocal.LevelManagerScript.InitScene();
     }
 
     #endregion

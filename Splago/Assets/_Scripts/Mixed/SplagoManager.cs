@@ -9,7 +9,8 @@ public class SplagoManager : MonoBehaviour, ILevelManager
 {
     public void InitScene()
     {
-        
+        Debug.Log("Init splago scene");
+        GameLoop.Instance.Init();
     }
 
     public void InputLevel()

@@ -15,14 +15,6 @@ public class GameLoop : SingletonMono<GameLoop>
     private List<PlayerData> orderPlayer;
 
     /// <summary>
-    /// here init everything for the game start
-    /// </summary>
-    private void Start()
-    {
-        Init();
-    }
-
-    /// <summary>
     /// initialize from leaving editor
     /// </summary>
     public void InitMisc()
@@ -30,7 +22,7 @@ public class GameLoop : SingletonMono<GameLoop>
         cursor.Init(CursorGrid.CursorEnum.HoverSimple);
     }
 
-    private void Init()
+    public void Init()
     {
         ActiveEditorMode();
 
