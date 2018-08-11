@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
-using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,7 +9,7 @@ using UnityEngine.UI;
 public class GridEditor : SingletonMono<GridEditor>
 {
     [SerializeField]
-    private GameObject ButtonActiveEditor;
+    private GameObject[] ButtonActiveEditor;
 
     [SerializeField]
     private GridEditorUI gridEditorUi;
@@ -29,7 +28,8 @@ public class GridEditor : SingletonMono<GridEditor>
 
     public void Init()
     {
-        ButtonActiveEditor.SetActive(true);
+        ButtonActiveEditor[0].SetActive(true);
+        ButtonActiveEditor[1].SetActive(true);
 
         activeEdition = false;
         SetEditorMode();

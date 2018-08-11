@@ -3,12 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[TypeInfoBox("Manage teh gameloop of the game")]
 public class GameLoop : SingletonMono<GameLoop>
 {
     [FoldoutGroup("Misc"), Tooltip("cursor in grid")]
     public CursorGrid cursor;
     [FoldoutGroup("Misc"), Tooltip("cursor in grid"), OnValueChanged("ActiveEditorMode")]
     public bool editorMod = false;
+
+    [SerializeField]
+    private List<PlayerData> orderPlayer;
 
     /// <summary>
     /// here init everything for the game start
