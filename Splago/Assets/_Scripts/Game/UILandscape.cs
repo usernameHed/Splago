@@ -5,32 +5,63 @@ using UnityEngine;
 
 public class UILandscape : SingletonMono<UILandscape>
 {
-    [SerializeField, OnValueChanged("ChangeOrientation")]
-    private ScreenOrientation screenOrientation = ScreenOrientation.AutoRotation;
+    [SerializeField]
+    private GameObject parentGameCanvas;
 
+    [ShowInInspector, ReadOnly]
+    private ScreenOrientation screenOrientation;
+
+    [FoldoutGroup("Filled by ILevelManager"), ReadOnly]
     public GameObject canvasWorld;
+    [FoldoutGroup("Filled by ILevelManager"), ReadOnly]
     public GameObject portrait;
+    [FoldoutGroup("Filled by ILevelManager"), ReadOnly]
     public GameObject landscape;
-    public bool forceMode = false;
 
     private RectTransform rtUiWorld;
 
     public void Init(GameObject UIPortrait, GameObject UILand, GameObject UIWorld)
     {
+        parentGameCanvas.transform.ClearChild();
+
         portrait = UIPortrait;
+        portrait.transform.SetParent(parentGameCanvas.transform);
+
         landscape = UILand;
+        landscape.transform.SetParent(parentGameCanvas.transform);
+
         canvasWorld = UIWorld;
 
         rtUiWorld = canvasWorld.GetComponent(typeof(RectTransform)) as RectTransform;
+
+        screenOrientation = Screen.orientation;
+
+        ChangeOrientation();
     }
 
+    public void OnOrientationChange()
+    {
+        ChangeOrientation();
+    }
+
+    public void OnResolutionChange()
+    {
+        ChangeOrientation();
+    }
+
+    
     private void ChangeOrientation()
     {
         if (!portrait || !landscape)
             return;
 
+        if (Screen.width > Screen.height)
+            screenOrientation = ScreenOrientation.Landscape;
+        else
+            screenOrientation = ScreenOrientation.Portrait;
+
         rtUiWorld.sizeDelta = new Vector2(Screen.width, Screen.height);
-        GameManager.Instance.CameraMain.orthographicSize = Screen.height / (2 * 1 /*pixel size*/);
+        GameManager.Instance.CameraMain.orthographicSize = Screen.height / (2 * 1 );
 
         if (screenOrientation == ScreenOrientation.Portrait)
         {
@@ -44,35 +75,5 @@ public class UILandscape : SingletonMono<UILandscape>
             portrait.SetActive(false);
             landscape.SetActive(true);
         }
-    }
-
-    private void TestOrientationChange()
-    {
-        if (!GameManager.Instance.CameraObject || !portrait || !landscape)
-            return;
-
-        if ((Input.deviceOrientation == DeviceOrientation.Portrait
-            || Input.deviceOrientation == DeviceOrientation.PortraitUpsideDown
-            || Input.deviceOrientation == DeviceOrientation.Unknown
-            ) && screenOrientation != ScreenOrientation.Portrait)
-        {
-            screenOrientation = ScreenOrientation.Portrait;
-            ChangeOrientation();
-        }
-        else if ((Input.deviceOrientation == DeviceOrientation.LandscapeLeft
-            || Input.deviceOrientation == DeviceOrientation.LandscapeRight
-            ) && screenOrientation != ScreenOrientation.Landscape)
-
-        {
-            screenOrientation = ScreenOrientation.Landscape;
-            ChangeOrientation();
-        }
-    }
-
-
-    private void Update()
-    {
-        if (!forceMode)
-            TestOrientationChange();
     }
 }
