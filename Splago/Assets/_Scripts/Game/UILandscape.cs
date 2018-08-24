@@ -8,8 +8,8 @@ public class UILandscape : SingletonMono<UILandscape>
     [SerializeField]
     private GameObject parentGameCanvas;
 
-    [ShowInInspector, ReadOnly]
-    private ScreenOrientation screenOrientation;
+    [ReadOnly]
+    public ScreenOrientation screenOrientation;
 
     [FoldoutGroup("Filled by ILevelManager"), ReadOnly]
     public GameObject canvasWorld;
@@ -62,6 +62,8 @@ public class UILandscape : SingletonMono<UILandscape>
 
         rtUiWorld.sizeDelta = new Vector2(Screen.width, Screen.height);
         GameManager.Instance.CameraMain.orthographicSize = Screen.height / (2 * 1 );
+        GridManager.Instance.gridScalar.Init();
+
 
         if (screenOrientation == ScreenOrientation.Portrait)
         {
