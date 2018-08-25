@@ -56,16 +56,12 @@ public class GridScalar : MonoBehaviour
         gridPadding = grid.padding;
         lastSize = Vector2.zero;
 
-        //SetupGrid();
         SetupGridSize();
     }
 	
     private void SetupPanelGridSize()
     {
-        //change gridPanel according to...% !!!
-        //gridPanel.sizeDelta = ;
         Vector2 size = worldPanelSize.sizeDelta;
-        //Debug.Log("size canvas: " + size);
 
         if (UILandscape.Instance.screenOrientation == ScreenOrientation.Portrait || !Application.isPlaying)
         {
@@ -79,7 +75,6 @@ public class GridScalar : MonoBehaviour
         }
 
         gridPanel.sizeDelta = size;
-        //Debug.Log("size panel: " + gridPanel.sizeDelta);
     }
 
     private void SetupGridSize()
@@ -94,15 +89,9 @@ public class GridScalar : MonoBehaviour
         float xrg = 0;                      //size x of all cells + spacing in x;
         float yrg = 0;                      //size y of all cells + spacing in y;
 
-        Debug.Log("x screen: " + x);
-        Debug.Log("y screen: " + y);
-        Debug.Log("x grid: " + rows);
-        Debug.Log("y grid: " + cols);
-
         //cas 1
         if (y >= x && yg > xg)
         {
-            Debug.Log("cas 1");
             space = y / 100f * 1f;
             grid.spacing = new Vector2(space, space);
 
@@ -118,7 +107,6 @@ public class GridScalar : MonoBehaviour
         //cas 2
         else if (y >= x && yg <= xg)
         {
-            Debug.Log("cas 2");
             space = x / 100 * 1f;
             grid.spacing = new Vector2(space, space);
 
@@ -131,25 +119,9 @@ public class GridScalar : MonoBehaviour
             grid.padding.left = 0;
             grid.padding.top = (int)((y / 2.0f) - (yrg / 2.0f));
         }
-        /*else if (y >= x && yg == xg)
-        {
-            Debug.Log("cas [1-2 square]");
-            space = y / 100f * 1f;
-            grid.spacing = new Vector2(space, space);
-
-            cellSize = (y - (space * (yg - 1))) / yg;
-            grid.cellSize = new Vector2(cellSize, cellSize);
-
-            xrg = (xg * cellSize) + (space * (xg - 1));
-            yrg = y;
-
-            grid.padding.left = (int)((x / 2.0f) - (xrg / 2.0f));
-            grid.padding.top = 0;
-        }*/
         //cas 3
         else if (y < x && yg > xg)
         {
-            Debug.Log("cas 3");
             space = y / 100 * 1f;
             grid.spacing = new Vector2(space, space);
 
@@ -165,7 +137,6 @@ public class GridScalar : MonoBehaviour
         //cas 4
         else if (y < x && yg <= xg)
         {
-            Debug.Log("cas 4");
             space = x / 100 * 1f;
             grid.spacing = new Vector2(space, space);
 
@@ -178,45 +149,9 @@ public class GridScalar : MonoBehaviour
             grid.padding.left = 0;
             grid.padding.top = (int)((y / 2.0f) - (yrg / 2.0f));
         }
-        /*else if (y < x && yg == xg)
-        {
-            Debug.Log("cas [3-4 square]");
-        }*/
         else
         {
             Debug.LogError("As you wish");
         }
-        Debug.Log("space: " + space);
-        Debug.Log("cellSize: " + cellSize);
-        Debug.Log("xrg: " + xrg);
-        Debug.Log("yrg: " + yrg);
     }
-
-
-    private void SetupGrid ()
-    {
-        return;
-
-        if (parent == null)
-            parent = GetComponent<RectTransform>();
-        if (lastSize == parent.rect.size)
-        {
-            return;
-        }
-        grid.spacing = new Vector2(spacing, spacing);
-
-        if (cols <= rows)
-        {
-            var paddingX = gridPadding.left + gridPadding.right;
-            var cellSize = Mathf.Round((parent.rect.width - paddingX - (rows - 1) * spacing) / rows);
-            grid.cellSize = new Vector2(cellSize, cellSize);
-        }
-        else
-        {
-            var paddingY = gridPadding.top + gridPadding.bottom;
-            var cellSize = Mathf.Round((parent.rect.height - paddingY - (cols - 1) * spacing) / cols);
-            grid.cellSize = new Vector2(cellSize, cellSize);
-        }
-        
-	}
 }

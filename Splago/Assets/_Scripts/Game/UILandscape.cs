@@ -52,7 +52,7 @@ public class UILandscape : SingletonMono<UILandscape>
     
     private void ChangeOrientation()
     {
-        if (!portrait || !landscape)
+        if (!portrait || !landscape || !rtUiWorld)
             return;
 
         if (Screen.width > Screen.height)

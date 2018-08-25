@@ -36,7 +36,9 @@ public class SingletonMono<T> : MonoBehaviour where T : MonoBehaviour
                         Debug.LogWarning("[Singleton] Something went really wrong " +
                             " - there should never be more than 1 singleton!" +
                             " Reopening the scene might fix it.");
-                        
+                        //Debug.Break();
+                        //DestroyImmediate(FindObjectsOfType(typeof(T)))
+                        //DestroyImmediate(_instance.gameObject);
                         return _instance;
                     }
 
