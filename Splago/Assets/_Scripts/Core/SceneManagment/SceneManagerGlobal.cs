@@ -33,6 +33,11 @@ public class SceneManagerGlobal : SingletonMono<SceneManagerGlobal>
 
     #region Core
 
+    public void ResetRetry()
+    {
+        StopCoroutine(Retry());
+    }
+
     ///////////////////////////////////////////////////////////////////////////// gestion asyncrone
     /// <summary>
     /// Ici ajoute une scene à charger
@@ -42,7 +47,7 @@ public class SceneManagerGlobal : SingletonMono<SceneManagerGlobal>
     /// <param name="additive">est-ce qu'on ajoute la scène en additif ou pas ??</param>
     public void StartLoading(string scene, bool swapWhenLoaded = true, bool additive = false, bool fade = false, float speedFade = 1.0f, string sceneToChargeAfterAdditive = "")
     {
-        
+        ResetRetry();
 
         if ((additive && fade) || scene == "")
         {
@@ -107,8 +112,11 @@ public class SceneManagerGlobal : SingletonMono<SceneManagerGlobal>
         }
 
         Debug.Log("ici active normalement...");
+        GameManager.Instance.newScene = true;
 
         sceneCharging[index].async.allowSceneActivation = true;
+
+        string sceneToChageIfBug = sceneCharging[index].scene;
 
         string newScene = (sceneCharging[index].isAdditive) ? sceneCharging[index].sceneToChargeAfterAdditive : "";
 
@@ -116,7 +124,21 @@ public class SceneManagerGlobal : SingletonMono<SceneManagerGlobal>
 
         if (newScene != "")
             FindWitchOneToLoadAfterAdditive(newScene);
+
+        
+
+        StartCoroutine(Retry(sceneToChageIfBug));
     }
+    private IEnumerator Retry(string sceneToChageIfBug = "")
+    {
+        yield return new WaitForSeconds(0.2f);
+        if (GameManager.Instance.newScene)
+        {
+            Debug.Log("retry ici !!! on a pas réussi à charger la scene !");
+            JumpToScene(sceneToChageIfBug);
+        }
+    }
+
     //relance l'essai d'activation
     private IEnumerator WaitForActivateScene(int index, float time) { yield return new WaitForSeconds(time); ActivateScene(index, true, time);  }
 
@@ -195,12 +217,17 @@ public class SceneManagerGlobal : SingletonMono<SceneManagerGlobal>
             SceneManager.LoadScene(scene);
             return;
         }
+        
         StartCoroutine(JumpToSceneWithFadeWait(scene, fadeSpeed));
     }
     private IEnumerator JumpToSceneWithFadeWait(string scene, float speed)
     {
-        /*float fadeTime = */gameObject.GetComponent<Fading>().BeginFade(1, speed);
+        Debug.Log("try to load fade");
+        Debug.Log("speed: " + speed);
+
+        gameObject.GetComponent<Fading>().BeginFade(1, speed);
         yield return new WaitForSeconds(speed / 2);
+        Debug.Log("done !");
         JumpToScene(scene);
     }
 

@@ -15,6 +15,8 @@ public static class TransformExt
     public static RectTransform ResetScale(this RectTransform transform)
     {
         transform.localScale = Vector3.one;
+        transform.offsetMin = new Vector2(0, 0);
+        transform.offsetMax = new Vector2(0, 0);
         return (transform);
     }
 

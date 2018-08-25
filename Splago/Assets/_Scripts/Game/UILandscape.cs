@@ -32,38 +32,39 @@ public class UILandscape : SingletonMono<UILandscape>
 
         canvasWorld = UIWorld;
 
-        rtUiWorld = canvasWorld.GetComponent(typeof(RectTransform)) as RectTransform;
+        if (canvasWorld)
+            rtUiWorld = canvasWorld.GetComponent(typeof(RectTransform)) as RectTransform;
 
         screenOrientation = Screen.orientation;
 
+        CancelInvoke();
+        //Invoke("ChangeOrientation", 0.2f);
         ChangeOrientation();
     }
 
     public void OnOrientationChange()
     {
-        ChangeOrientation();
+        CancelInvoke();
+        Invoke("ChangeOrientation", 0.2f);
+        //ChangeOrientation();
     }
 
     public void OnResolutionChange()
     {
-        ChangeOrientation();
+        CancelInvoke();
+        Invoke("ChangeOrientation", 0.2f);
+        //ChangeOrientation();
     }
 
-    
     private void ChangeOrientation()
     {
-        if (!portrait || !landscape || !rtUiWorld)
+        if (!portrait || !landscape)
             return;
 
         if (Screen.width > Screen.height)
             screenOrientation = ScreenOrientation.Landscape;
         else
             screenOrientation = ScreenOrientation.Portrait;
-
-        rtUiWorld.sizeDelta = new Vector2(Screen.width, Screen.height);
-        GameManager.Instance.CameraMain.orthographicSize = Screen.height / (2 * 1 );
-        GridManager.Instance.gridScalar.Init();
-
 
         if (screenOrientation == ScreenOrientation.Portrait)
         {
@@ -77,5 +78,12 @@ public class UILandscape : SingletonMono<UILandscape>
             portrait.SetActive(false);
             landscape.SetActive(true);
         }
+
+        if (!rtUiWorld || !GridManager.Instance || !GridManager.Instance.gridScalar)
+            return;
+
+        rtUiWorld.sizeDelta = new Vector2(Screen.width, Screen.height);
+        GameManager.Instance.CameraMain.orthographicSize = Screen.height / (2 * 1 );
+        GridManager.Instance.gridScalar.Init();
     }
 }

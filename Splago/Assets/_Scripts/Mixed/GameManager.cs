@@ -15,6 +15,8 @@ public class GameManager : SingletonMono<GameManager>
     [FoldoutGroup("Debug"), Tooltip("opti fps"), SerializeField]
 	private FrequencyTimer updateTimer;
 
+    public bool newScene = false;
+
     [FoldoutGroup("Debug"), Tooltip("Caméra"), SerializeField]
     private GameObject cameraObject;
     public GameObject CameraObject
@@ -62,6 +64,8 @@ public class GameManager : SingletonMono<GameManager>
         SetCamera(cameraObject);
 
         //init le level...
+        newScene = false;
+        //SceneManagerGlobal.Instance.ResetRetry();
         sceneManagerLocal.LevelManagerScript.InitScene();
     }
 

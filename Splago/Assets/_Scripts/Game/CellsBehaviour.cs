@@ -38,7 +38,7 @@ public class CellsBehaviour : MonoBehaviour
                 PointerClick();
             else
                 GridEditor.Instance.HoverCase(xPos, yPos, this, true);
-        }            
+        }
         else
             GameLoop.Instance.HoverCase(xPos, yPos, this, true);
     }

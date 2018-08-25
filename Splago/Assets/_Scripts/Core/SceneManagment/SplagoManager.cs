@@ -20,17 +20,23 @@ public class SplagoManager : MonoBehaviour, ILevelManager
 
     public void InputLevel()
     {
-        
+        Debug.Log("nothing for this scene");
     }
 
-    [Button("Restart")]
+
     public void Play()
     {
         GameManager.Instance.SceneManagerLocal.PlayNext();
     }
-    [Button("Back")]
-    public void Quit()
+
+    public void Previous()
     {
         GameManager.Instance.SceneManagerLocal.PlayPrevious();
+    }
+
+
+    public void PlayIndex(int index)
+    {
+        Debug.Log("nothing for this scene");
     }
 }

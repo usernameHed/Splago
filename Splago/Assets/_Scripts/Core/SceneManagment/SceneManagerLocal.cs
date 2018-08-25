@@ -10,6 +10,7 @@ using System;
 /// MenuManager Description
 /// </summary>
 [TypeInfoBox("Have this localized in a scene, permit to define the scene transition next/previous, with option")]
+[TypeInfoBox("First is always Next/reload, Second always previous (Quit if not here), Third+ by index)")]
 public class SceneManagerLocal : MonoBehaviour
 {
     //[SerializeField]
@@ -71,7 +72,6 @@ public class SceneManagerLocal : MonoBehaviour
                 Debug.LogError("PAS DE III LEVEL MANAGER");
         }
 
-        
         GameManager.Instance.SceneManagerLocal = this;
 
         InitSceneLoading();
@@ -151,32 +151,32 @@ public class SceneManagerLocal : MonoBehaviour
 
         //ici gère les unloads ?
     }
-    public void PlayPrevious(bool unloadFirst = true)
+    public void PlayPrevious()
     {
         if (!enabledScript)
             return;
 
-        enabledScript = false;
-
-        if (unloadFirst)
-            SceneManagerGlobal.Instance.UnloadScene(sceneToLoad[0].scene);
 
         ObjectsPooler.Instance.DesactiveEveryOneForTransition();
         //ObjectsPoolerLocal.Instance.desactiveEveryOneForTransition();
 
+        //if there are no previous... quit application !
+        if (sceneToLoad.Count < 2)
+        {
+            Quit();
+            return;
+        }
+        enabledScript = false;
+
         SceneManagerGlobal.Instance.JumpToScene(sceneToLoad[1].scene, sceneToLoad[1].fade, sceneToLoad[1].fadeTime);    //hard code du previous ?
-        //ici gère les unloads ?
     }
 
-    public void PlayIndex(int index, bool unloadFirst = true)
+    public void PlayIndex(int index)
     {
         if (!enabledScript)
             return;
 
         enabledScript = false;
-
-        if (unloadFirst)
-            SceneManagerGlobal.Instance.UnloadScene(sceneToLoad[0].scene);
 
         ObjectsPooler.Instance.DesactiveEveryOneForTransition();
         //ObjectsPoolerLocal.Instance.desactiveEveryOneForTransition();

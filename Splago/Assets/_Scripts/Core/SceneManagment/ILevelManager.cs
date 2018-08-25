@@ -10,6 +10,6 @@ public interface ILevelManager
 	void InitScene();
 
     void Play();    //passe à la scène suivante
-    void Quit();    //passe à la scene précédente
+    void Previous();    //passe à la scene précédente
     void InputLevel();   //input du level
 }
