@@ -5,8 +5,8 @@
 <e IsBuiltin = "true" Id = "0" Title = "Error" IsEnabled = "true" IsCustomIcon = "true" IsConsumeEnabled = "true" IsSharing = "false" SharingMode = "ToolbarAndRowIcon" IdSharing = "0" IsHideIfEmpty = "false" HasNavButton = "true" OpenWith = "\0" Theme = "BrightSmall" SizeAdjust = "0" ColorizeRowFor = "AllLogsInTab" BgFlashFor = "AllLogsInTab" BgFlashDuration = "TwoSeconds">
 <BgColorFlash ProSkin = "FF1400A0" FreeSkin = "FF1400FF" />
 <TextColor ProSkin = "B4B4B4FF" FreeSkin = "000000FF" />
-<BgColorEven ProSkin = "FF14002A" FreeSkin = "FF1E004D" />
-<BgColorOdd ProSkin = "FF140018" FreeSkin = "FF1E0034" />
+<BgColorEven ProSkin = "FF14002A" FreeSkin = "FF1E0086" />
+<BgColorOdd ProSkin = "FF140018" FreeSkin = "FF1E0070" />
 <IconMain>
 <Layers>
 <e Size = "24" OutlineThickness = "0,428571403026581" OutlineShape = "Round" IconText = "" IconShape = "OctagonSmall" OffsetX = "0" OffsetY = "0" IsItalic = "false">
@@ -44,11 +44,11 @@
 </Layers>
 </IconToolbarGrey>
 </e>
-<e IsBuiltin = "false" Id = "3" Title = "Error, Compiler" IsEnabled = "true" IsCustomIcon = "false" IsConsumeEnabled = "true" IsSharing = "true" SharingMode = "ToolbarAndRowIcon" IdSharing = "0" IsHideIfEmpty = "false" HasNavButton = "false" OpenWith = "\0" Theme = "Unity" SizeAdjust = "0" ColorizeRowFor = "AllLogsInTab" BgFlashFor = "AllLogsInTab" BgFlashDuration = "TwoSeconds">
+<e IsBuiltin = "false" Id = "3" Title = "Error, Compiler" IsEnabled = "true" IsCustomIcon = "false" IsConsumeEnabled = "true" IsSharing = "true" SharingMode = "ToolbarAndRowIcon" IdSharing = "0" IsHideIfEmpty = "false" HasNavButton = "false" OpenWith = "\0" Theme = "Unity" SizeAdjust = "0" ColorizeRowFor = "AllLogsInTab" BgFlashFor = "AllLogsInTab" BgFlashDuration = "HalfSecond">
 <BgColorFlash ProSkin = "FF1400A0" FreeSkin = "FF1400FF" />
 <TextColor ProSkin = "B4B4B4FF" FreeSkin = "000000FF" />
-<BgColorEven ProSkin = "FF14002A" FreeSkin = "FF1E0041" />
-<BgColorOdd ProSkin = "FF140018" FreeSkin = "FF1E0037" />
+<BgColorEven ProSkin = "FF14002A" FreeSkin = "FF1E006F" />
+<BgColorOdd ProSkin = "FF140018" FreeSkin = "FF1E0082" />
 <IconMain>
 <Layers>
 <e Size = "20" OutlineThickness = "0" OutlineShape = "Round" IconText = "" IconShape = "None" OffsetX = "0" OffsetY = "0" IsItalic = "false">
@@ -92,7 +92,7 @@
 <s v = "Shader error in" />
 </Keywords>
 </e>
-<e IsBuiltin = "true" Id = "1" Title = "Warning" IsEnabled = "true" IsCustomIcon = "true" IsConsumeEnabled = "true" IsSharing = "false" SharingMode = "ToolbarAndRowIcon" IdSharing = "0" IsHideIfEmpty = "false" HasNavButton = "false" OpenWith = "\0" Theme = "BrightSmall" SizeAdjust = "0" ColorizeRowFor = "AllLogsInTab" BgFlashFor = "AllLogsInTab" BgFlashDuration = "TwoSeconds">
+<e IsBuiltin = "true" Id = "1" Title = "Warning" IsEnabled = "true" IsCustomIcon = "true" IsConsumeEnabled = "true" IsSharing = "false" SharingMode = "ToolbarAndRowIcon" IdSharing = "0" IsHideIfEmpty = "false" HasNavButton = "false" OpenWith = "\0" Theme = "BrightSmall" SizeAdjust = "0" ColorizeRowFor = "AllLogsInTab" BgFlashFor = "AllLogsInTab" BgFlashDuration = "HalfSecond">
 <BgColorFlash ProSkin = "C9B90064" FreeSkin = "C9B900FF" />
 <TextColor ProSkin = "B4B4B4FF" FreeSkin = "000000FF" />
 <BgColorEven ProSkin = "C9B9001C" FreeSkin = "C9B90037" />
@@ -134,11 +134,11 @@
 </Layers>
 </IconToolbarGrey>
 </e>
-<e IsBuiltin = "false" Id = "4" Title = "Warning, Compiler" IsEnabled = "true" IsCustomIcon = "false" IsConsumeEnabled = "true" IsSharing = "true" SharingMode = "ToolbarAndRowIcon" IdSharing = "1" IsHideIfEmpty = "false" HasNavButton = "false" OpenWith = "\0" Theme = "Unity" SizeAdjust = "0" ColorizeRowFor = "AllLogsInTab" BgFlashFor = "AllLogsInTab" BgFlashDuration = "OneSecond">
+<e IsBuiltin = "false" Id = "4" Title = "Warning, Compiler" IsEnabled = "true" IsCustomIcon = "false" IsConsumeEnabled = "true" IsSharing = "true" SharingMode = "ToolbarAndRowIcon" IdSharing = "1" IsHideIfEmpty = "false" HasNavButton = "false" OpenWith = "\0" Theme = "Unity" SizeAdjust = "0" ColorizeRowFor = "AllLogsInTab" BgFlashFor = "AllLogsInTab" BgFlashDuration = "HalfSecond">
 <BgColorFlash ProSkin = "C9B90064" FreeSkin = "C9B900FF" />
 <TextColor ProSkin = "B4B4B4FF" FreeSkin = "000000FF" />
-<BgColorEven ProSkin = "C9B9001C" FreeSkin = "C9B9007B" />
-<BgColorOdd ProSkin = "C9B90014" FreeSkin = "C9B90046" />
+<BgColorEven ProSkin = "C9B9001C" FreeSkin = "C9B90037" />
+<BgColorOdd ProSkin = "C9B90014" FreeSkin = "C9B90028" />
 <IconMain>
 <Layers>
 <e Size = "20" OutlineThickness = "0" OutlineShape = "Round" IconText = "" IconShape = "None" OffsetX = "0" OffsetY = "0" IsItalic = "false">

@@ -16,6 +16,7 @@ public class SpawnManager : SingletonMono<SpawnManager>
     {
         Debug.Log("init player: 1 v 1");
         parentPlayer.ClearChild();
+        playerManagers.Clear();
         for (int i = 0; i < 2; i++)
         {
             GameObject player = Instantiate(playerPrefabs, parentPlayer);

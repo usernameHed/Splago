@@ -58,6 +58,8 @@ public class UILandscape : SingletonMono<UILandscape>
 
     private void ChangeOrientation()
     {
+        EventManager.TriggerEvent(GameData.Event.ResolutionChange);
+
         if (!portrait || !landscape)
             return;
 

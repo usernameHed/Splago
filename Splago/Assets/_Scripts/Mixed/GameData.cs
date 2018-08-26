@@ -14,6 +14,7 @@ public static class GameData
     {
         GameOver,
         AdditiveJustFinishLoad, //used by SceneManagerGlobal
+        ResolutionChange,   //used by UILandscape
     };
 
     public enum Prefabs

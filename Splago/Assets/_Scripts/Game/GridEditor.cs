@@ -9,6 +9,9 @@ using UnityEngine.UI;
 public class GridEditor : SingletonMono<GridEditor>
 {
     [SerializeField]
+    private bool activeEditor = true; 
+
+    [SerializeField]
     private GameObject[] ButtonActiveEditor;
 
     [SerializeField]
@@ -28,8 +31,8 @@ public class GridEditor : SingletonMono<GridEditor>
 
     public void Init()
     {
-        ButtonActiveEditor[0].SetActive(true);
-        ButtonActiveEditor[1].SetActive(true);
+        ButtonActiveEditor[0].SetActive(activeEditor);
+        ButtonActiveEditor[1].SetActive(activeEditor);
 
         activeEdition = false;
         SetEditorMode();
