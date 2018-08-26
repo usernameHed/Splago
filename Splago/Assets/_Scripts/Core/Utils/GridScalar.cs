@@ -66,7 +66,7 @@ public class GridScalar : MonoBehaviour
     private void SetupPanelGridSize()
     {
         size = worldPanelSize.sizeDelta;
-        Debug.Log("size worldPanel: " + size);
+        //Debug.Log("size worldPanel: " + size);
 
         if (UILandscape.Instance.screenOrientation == ScreenOrientation.Portrait || !Application.isPlaying)
         {
@@ -79,7 +79,7 @@ public class GridScalar : MonoBehaviour
             size.y = size.y / 100 * landscapeYPercentage;
         }
 
-        Debug.Log("size gridPanel after %age: " + size);
+        //Debug.Log("size gridPanel after %age: " + size);
 
         gridPanel.sizeDelta = size;
     }
@@ -93,10 +93,10 @@ public class GridScalar : MonoBehaviour
         paddingLeft = (int)((x / 2.0f) - (xrg / 2.0f));     //calculate padding left
         paddingTop = 0;                                     //0 to top
 
-        Debug.Log("xrg: " + xrg + ", and x: " + x);
+        //Debug.Log("xrg: " + xrg + ", and x: " + x);
         if (xrg > x)
         {
-            Debug.Log("do inverse !!");
+            //Debug.Log("do inverse !!");
             return (false);
         }
         return (true);
@@ -110,10 +110,10 @@ public class GridScalar : MonoBehaviour
         paddingLeft = 0;                                    //calculate padding left
         paddingTop = (int)((y / 2.0f) - (yrg / 2.0f));      //0 to top
 
-        Debug.Log("yrg: " + yrg + ", and y: " + y);
+        //Debug.Log("yrg: " + yrg + ", and y: " + y);
         if (yrg > y)
         {
-            Debug.Log("do inverse !!");
+            //Debug.Log("do inverse !!");
             return (false);
         }
         return (true);
@@ -130,15 +130,15 @@ public class GridScalar : MonoBehaviour
         xrg = 0;
         yrg = 0;
 
-        Debug.Log("size x,y after %: " + x + ", " + y);
+        //Debug.Log("size x,y after %: " + x + ", " + y);
 
         //cas 1
         if (y >= x && yg > xg)
         {
-            Debug.Log("cas 1");
+            //Debug.Log("cas 1");
             if (!Case1())
             {
-                Debug.Log("ok, calcule case 2 !!!");
+                //Debug.Log("ok, calcule case 2 !!!");
                 Case2();
             }
 
@@ -148,7 +148,7 @@ public class GridScalar : MonoBehaviour
         {
             if (!Case2())
             {
-                Debug.Log("ok, calcule case 2 !!!");
+                //Debug.Log("ok, calcule case 2 !!!");
                 Case1();
             }
         }
@@ -157,17 +157,17 @@ public class GridScalar : MonoBehaviour
         {
             if (!Case1())
             {
-                Debug.Log("ok, calcule case 2 !!!");
+                //Debug.Log("ok, calcule case 2 !!!");
                 Case2();
             }
         }
         //cas 4
         else if (y < x && yg <= xg)
         {
-            Debug.Log("cas 4");
+            //Debug.Log("cas 4");
             if (!Case2())
             {
-                Debug.Log("ok, calcule case 2 !!!");
+                //Debug.Log("ok, calcule case 2 !!!");
                 Case1();
             }
         }

@@ -68,13 +68,13 @@ public class UILandscape : SingletonMono<UILandscape>
 
         if (screenOrientation == ScreenOrientation.Portrait)
         {
-            Debug.Log("portrait !");
+            //Debug.Log("portrait !");
             portrait.SetActive(true);
             landscape.SetActive(false);
         }
         else
         {
-            Debug.Log("Landscape !");
+            //Debug.Log("Landscape !");
             portrait.SetActive(false);
             landscape.SetActive(true);
         }

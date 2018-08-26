@@ -88,12 +88,12 @@ public class SceneManagerGlobal : SingletonMono<SceneManagerGlobal>
         {
             if (sceneCharging[i].scene == scene)
             {
-                Debug.Log("Ou la ?");
+                //Debug.Log("Ou la ?");
                 StartCoroutine(ActiveSceneWithFadeWait(i, speedFade));
                 return;
             }
         }
-        Debug.Log("scene not found ! Load the scene en normal...:" + scene);
+        //Debug.Log("scene not found ! Load the scene en normal...:" + scene);
         JumpToScene(scene, fade, speedFade);
     }
 
@@ -111,7 +111,7 @@ public class SceneManagerGlobal : SingletonMono<SceneManagerGlobal>
             return;
         }
 
-        Debug.Log("ici active normalement...");
+        //Debug.Log("ici active normalement...");
         GameManager.Instance.newScene = true;
 
         sceneCharging[index].async.allowSceneActivation = true;
@@ -175,7 +175,7 @@ public class SceneManagerGlobal : SingletonMono<SceneManagerGlobal>
     {
         float fadeTime = gameObject.GetComponent<Fading>().BeginFade(1, speedFade);
         yield return new WaitForSeconds(fadeTime / 2);
-        Debug.Log("passe ici ??");
+        //Debug.Log("passe ici ??");
         ActivateScene(index, true); //essay d'activer, si on n'y arrive pas on réésai !!!
     }
 

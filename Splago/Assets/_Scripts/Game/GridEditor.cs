@@ -51,7 +51,7 @@ public class GridEditor : SingletonMono<GridEditor>
         }
         else
         {
-            Debug.Log("no more editor mode");
+            //Debug.Log("no more editor mode");
             GameLoop.Instance.InitMisc();
             gridEditorUi.ActiveDevMod(false);
         }

@@ -21,7 +21,7 @@ public class GridSaveAndLoad : MonoBehaviour
     [Button]
     public void Init()
     {
-        Debug.Log("Init savedFiles");
+        //Debug.Log("Init savedFiles");
         savedFiles.Clear();
 
         //ici parcourt le dossier Resousrce/pathMaps avec la methode de zameran
@@ -65,7 +65,14 @@ public class GridSaveAndLoad : MonoBehaviour
 
         //ici save les courantes data dans le ficher nameFile (créé ou remplace)
         var pathSavedMaps = $"{editorPath}/{pathMaps}/{nameFile}.{extentionFile}";
-        using (StreamWriter writer =
+
+        int sizeX = GridManager.Instance.SizeX;
+        int sizeY = GridManager.Instance.SizeY;
+        string content = sizeX + " " + sizeY + "\n" + GridManager.Instance.GetAllDataToString();
+
+        ExtFile.SaveFromEditor(pathSavedMaps, content);
+
+        /*using (StreamWriter writer =
         new StreamWriter(pathSavedMaps))
         {
             //writer.Write("Word ");
@@ -73,7 +80,7 @@ public class GridSaveAndLoad : MonoBehaviour
             int sizeY = GridManager.Instance.SizeY;
             writer.WriteLine(sizeX + " " + sizeY);
             writer.WriteLine(GridManager.Instance.GetAllDataToString());
-        }
+        }*/
 
         if (savedFiles.Contains(nameFile))
         {
@@ -96,6 +103,10 @@ public class GridSaveAndLoad : MonoBehaviour
         var pathSavedMaps = $"{editorPath}/{pathMaps}/{nameFile}.{extentionFile}";
         //ici load les donnée de nameFile dans les data courante
         //string dataToLoad = "";
+
+
+        //ExtFile.Load(pathSavedMaps);
+
         if (!File.Exists(pathSavedMaps))
             return (false);
 
@@ -150,7 +161,8 @@ public class GridSaveAndLoad : MonoBehaviour
         if (!File.Exists(pathSavedMaps))
             return (false);
 
-        File.Delete(pathSavedMaps);
+        ExtFile.DeleteFromEditor(pathSavedMaps);
+        //File.Delete(pathSavedMaps);
 
         savedFiles.Remove(nameFile);
 

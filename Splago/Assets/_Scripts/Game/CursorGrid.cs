@@ -61,7 +61,7 @@ public class CursorGrid : MonoBehaviour
         {
             posOfCursors.ActiveAllChild(false);
 
-            Debug.Log("change scale");
+            //Debug.Log("change scale");
             cursors[indexCursor].obj.transform.SetParent(cell.GetParentCursor());
             cursors[indexCursor].obj.GetComponent<RectTransform>().ResetPos();
             cursors[indexCursor].obj.GetComponent<RectTransform>().ResetScale();
