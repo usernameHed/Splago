@@ -4,6 +4,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using System;
+
+[Serializable]
+public struct SlotUi
+{
+    public List<RectTransform> nextPlayer;
+    public RectTransform separator;
+    public TextMeshProUGUI textNextTurn;
+}
 
 [TypeInfoBox("Manage teh gameloop of the game")]
 public class GameUILink : MonoBehaviour
@@ -18,7 +27,7 @@ public class GameUILink : MonoBehaviour
     private List<TextMeshProUGUI> turnGameUI;                  //manage both UI
 
     [SerializeField]
-    private List<RectTransform> parentSlotNextUI;                  //manage both UI
+    private List<SlotUi> parentSlotNextUI;                  //manage both UI
 
     [SerializeField, ReadOnly]
     private int timerPlayer = 99;
@@ -47,6 +56,10 @@ public class GameUILink : MonoBehaviour
         {
             turnGameUI[i].text = gameLoop.GetCurrentTurn().ToString();
         }
+        for (int k = 0; k < parentSlotNextUI.Count; k++)
+        {
+            parentSlotNextUI[k].textNextTurn.text = (gameLoop.GetCurrentTurn() + 1).ToString();
+        }
     }
 
 
@@ -60,12 +73,13 @@ public class GameUILink : MonoBehaviour
             //loop thought player, from current, to MAX (may not be in Order playing
             for (int i = 0; i < GameLoop.Instance.GetOrderPlayer().Count - 1; i++)
             {
-                parentSlotNextUI[k].GetChild(i).gameObject.SetActive(true);
+                parentSlotNextUI[k].nextPlayer[i].gameObject.SetActive(true);
             }
-            for (int i = GameLoop.Instance.GetOrderPlayer().Count - 1; i < GameLoop.maxPlayer; i++)
+            for (int i = GameLoop.Instance.GetOrderPlayer().Count - 1; i < GameLoop.maxPlayer - 1; i++)
             {
-                parentSlotNextUI[k].GetChild(i).gameObject.SetActive(false);
+                parentSlotNextUI[k].nextPlayer[i].gameObject.SetActive(false);
             }
+            parentSlotNextUI[k].separator.gameObject.SetActive(true);
         }
     }
 
@@ -96,19 +110,28 @@ public class GameUILink : MonoBehaviour
         for (int k = 0; k < parentSlotNextUI.Count; k++)
         {
             int indexNext = currentPlayer.GetIndex() + 1;
+            parentSlotNextUI[k].separator.transform.SetSiblingIndex(gameLoop.GetOrderPlayer().Count);
 
             //loop thought player, from current, to MAX (may not be in Order playing
-            for (int i = 0; i < parentSlotNextUI[k].childCount; i++)
+            for (int i = 0; i < parentSlotNextUI[k].nextPlayer.Count; i++)
             {
-                if (!parentSlotNextUI[k].GetChild(i).gameObject.IsActive())
+                if (!parentSlotNextUI[k].nextPlayer[i].gameObject.IsActive())
                     continue;
                 //get next index
                 
                 if (indexNext >= gameLoop.GetOrderPlayer().Count)
+                {
+                    Debug.Log("separator: " + i + ", selected one: " + currentPlayer.GetIndex());
+                    /*if (currentPlayer.GetIndex() == 0)
+                        parentSlotNextUI[k].separator.transform.SetSiblingIndex(gameLoop.GetOrderPlayer().Count);
+                    else*/
+                        parentSlotNextUI[k].separator.transform.SetSiblingIndex(i);
                     indexNext = 0;
+                }
+                    
 
                 PlayerManager playerNext = gameLoop.GetOrderPlayer()[indexNext];
-                parentSlotNextUI[k].GetChild(i).gameObject.GetComponent<NextSlot>().Init(playerNext);
+                parentSlotNextUI[k].nextPlayer[i].gameObject.GetComponent<NextSlot>().Init(playerNext);
 
                 indexNext++;
             }
