@@ -21,7 +21,7 @@ public class GridManager : SingletonMono<GridManager>
     public ushort[,] gridData;
 
     [SerializeField]
-    private string mapToLoadAtStart = "map1";
+    private string mapToLoadAtStart = "default";
 
     [SerializeField]
     private GridSaveAndLoad gridSaveAndLoad;
@@ -44,7 +44,11 @@ public class GridManager : SingletonMono<GridManager>
         gridSaveAndLoad.Init();
 
         if (!gridSaveAndLoad.Load(mapToLoadAtStart))
+        {
+            Debug.LogWarning("Load new grid, because loading default failed !");
             LoadNewGrid(sizeX, sizeY, gridData);
+        }
+            
     }
 
     /// <summary>

@@ -7,20 +7,30 @@ using UnityEngine;
 public class PlayerManager : MonoBehaviour
 {
     [SerializeField]
+    private float time = 30f;
+    public float GetTime() { return (time); }
+
+    [SerializeField, ReadOnly]
     private int index;
     public int GetIndex() { return (index); }
-    [SerializeField]
+    [SerializeField, ReadOnly]
     private string namePlayer;
     public string GetName() { return (namePlayer); }
 
-    [SerializeField]
-    private float time = 15f;
-    public float GetTime() { return (time); }
+    [SerializeField, ReadOnly]
+    private Sprite spritePlayer;
+    public Sprite GetSpritePlayer() { return (spritePlayer); }
+    [SerializeField, ReadOnly]
+    private Color colorSprite;
+    public Color GetColorPlayer() { return (colorSprite); }
 
-	public void Init(int _index)
+
+    public void Init(int _index)
     {
         index = _index;
         Debug.Log("init player data: " + index);
         namePlayer = ExtRandom.GetRandomName();
+        spritePlayer = GridDatas.Instance.cellsDatasPlayer[index].sprite;
+        colorSprite = GridDatas.Instance.cellsDatasPlayer[index].color;
     }
 }

@@ -6,22 +6,36 @@ using UnityEngine;
 [TypeInfoBox("Manage teh gameloop of the game")]
 public class GameLoop : SingletonMono<GameLoop>
 {
+    [ShowInInspector, ReadOnly]
+    public static int maxPlayer = 4;
+
     [SerializeField, ReadOnly]
-    private bool gameStart = false;
+    private int currentGameTurn = 1;
+    public int GetCurrentTurn() { return (currentGameTurn); }
+
+    [SerializeField, ReadOnly]
+    private bool playerIsPlaying = false;
+    public bool PlayerIsPlaying() { return (playerIsPlaying); }
     [SerializeField, ReadOnly]
     private int idStart = -1;
     [SerializeField, ReadOnly]
     private PlayerManager currentPlayingPlayer = null;
+    public PlayerManager GetCurrentPlayer() { return (currentPlayingPlayer); }
+
+    [SerializeField]
+    private List<PlayerManager> orderPlayer;
+    public List<PlayerManager> GetOrderPlayer() { return (orderPlayer); }
+
+    
+    public GameUILink gameUILink;
 
     [FoldoutGroup("Misc"), Tooltip("cursor in grid")]
     public CursorGrid cursor;
     [FoldoutGroup("Misc"), Tooltip("cursor in grid"), OnValueChanged("ActiveEditorMode")]
     public bool editorMod = false;
 
-    [SerializeField]
-    private List<PlayerManager> orderPlayer;
-
     private FrequencyCoolDown timerPlayer = new FrequencyCoolDown();
+    public FrequencyCoolDown GetTimerPlayer() { return (timerPlayer); }
 
     /// <summary>
     /// initialize from leaving editor
@@ -35,9 +49,11 @@ public class GameLoop : SingletonMono<GameLoop>
     {
         ActiveEditorMode();
 
-        gameStart = false;
+        playerIsPlaying = false;
         idStart = -1;
+        currentGameTurn = 1;
         currentPlayingPlayer = null;
+        
 
         InitMisc();                             //init cursor
         GridManager.Instance.InitGrid();        //init grid
@@ -48,7 +64,8 @@ public class GameLoop : SingletonMono<GameLoop>
             Debug.LogError("no player !");
             return;
         }
-        StartNewRound();
+        gameUILink.Init();
+        StartNewRound();        
     }
 
     /// <summary>
@@ -58,23 +75,37 @@ public class GameLoop : SingletonMono<GameLoop>
     {
         idStart++;
         if (idStart >= orderPlayer.Count)
+        {
+            currentGameTurn++;             //add new round if old one is finished !
+            gameUILink.NewGameTurn();
             idStart = 0;
+        }
+
 
         currentPlayingPlayer = orderPlayer[idStart];
     }
 
+    /// <summary>
+    /// setup a player and play the round !
+    /// </summary>
     private void StartNewRound()
     {
+        
         SetCurrentPlayer();
 
         Debug.Log("Active player " + currentPlayingPlayer.GetName());
         timerPlayer.StartCoolDown(currentPlayingPlayer.GetTime());
+
+        playerIsPlaying = true;
+
+        gameUILink.StartNewRound(); //init UI
     }
 
     private void TestEndRound()
     {
         if (timerPlayer.IsStartedAndOver())
         {
+            playerIsPlaying = false;
             Debug.Log("time of player " + currentPlayingPlayer.GetName() + " over");
             StartNewRound();
         }

@@ -5,6 +5,9 @@ using UnityEngine;
 public class SpawnManager : SingletonMono<SpawnManager>
 {
     [SerializeField]
+    private int numberPlayer = 2;
+
+    [SerializeField]
     private Transform parentPlayer;
     [SerializeField]
     private GameObject playerPrefabs;
@@ -17,7 +20,11 @@ public class SpawnManager : SingletonMono<SpawnManager>
         Debug.Log("init player: 1 v 1");
         parentPlayer.ClearChild();
         playerManagers.Clear();
-        for (int i = 0; i < 2; i++)
+
+        if (numberPlayer > GameLoop.maxPlayer)
+            numberPlayer = GameLoop.maxPlayer;
+
+        for (int i = 0; i < numberPlayer; i++)
         {
             GameObject player = Instantiate(playerPrefabs, parentPlayer);
             PlayerManager playerScript = player.GetComponent<PlayerManager>();

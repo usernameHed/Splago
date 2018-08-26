@@ -21,6 +21,16 @@ public class FrequencyCoolDown
         coolDownStarted = true;
     }
 
+    /// <summary>
+    /// return actual time
+    /// </summary>
+    public float GetTimer()
+    {
+        if (IsReady())
+            return (0);
+        return (timeToGo - Time.fixedTime);
+    }
+
     public bool IsReady()
     {
         if (!IsWaiting() || IsStartedAndOver())

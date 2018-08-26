@@ -98,7 +98,11 @@ public class GridSaveAndLoad : MonoBehaviour
     {
         Debug.Log("Load " + nameFile);
         if (string.IsNullOrEmpty(nameFile))
+        {
+            Debug.LogWarning("isNull");
             return (false);
+        }
+            
 
         var pathSavedMaps = $"{editorPath}/{pathMaps}/{nameFile}.{extentionFile}";
         //ici load les donnée de nameFile dans les data courante
@@ -106,9 +110,13 @@ public class GridSaveAndLoad : MonoBehaviour
 
 
         //ExtFile.Load(pathSavedMaps);
-
         if (!File.Exists(pathSavedMaps))
+        {
+
+            Debug.LogWarning("file doesn't exist");
             return (false);
+        }
+
 
         int sizeXData = 0;
         int sizeYData = 0;
