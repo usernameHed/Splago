@@ -104,11 +104,12 @@ public class GridSaveAndLoad : MonoBehaviour
         }
             
 
-        var pathSavedMaps = $"{editorPath}/{pathMaps}/{nameFile}.{extentionFile}";
+        var pathSavedMaps = $"{pathMaps}/{nameFile}";
         //ici load les donnée de nameFile dans les data courante
         //string dataToLoad = "";
 
         string content = "";
+        Debug.Log("path map to load: " + pathSavedMaps);
         bool openFile = ExtFile.LoadFromResource(pathSavedMaps, ref content);
 
 
@@ -127,6 +128,7 @@ public class GridSaveAndLoad : MonoBehaviour
         int index = 0;
         for (int k = 0; k < contentLine.Length; k++)
         {
+            //Debug.Log(contentLine[k]);
             //dataToLoad += s + "\n";
             if (index == 0)
             {
@@ -141,8 +143,11 @@ public class GridSaveAndLoad : MonoBehaviour
                 string[] lineDatas = contentLine[k].Split(' ');
                 for (int i = 0; i < lineDatas.Length; i++)
                 {
+                    if (string.IsNullOrWhiteSpace(lineDatas[i]))
+                        continue;
                     //Debug.Log(lineDatas[i]);
                     gridData[i, index - 1] = (ushort)(lineDatas[i].ToInt(0));
+                    //Debug.Log("done");
                 }
             }
 

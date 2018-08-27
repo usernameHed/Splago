@@ -10,6 +10,7 @@ public class LevelManagerLocal : MonoBehaviour, ILevelManager
     public GameObject canvasLandscape;
     public GameObject canvasWorld;
     public GameObject ILevelLocal;
+    public Transform parentUICanvas;    //paren tto portrait/landscape
 
     private ILevelLocal levelManger;
 
@@ -22,6 +23,7 @@ public class LevelManagerLocal : MonoBehaviour, ILevelManager
 
         //Debug.Log("nothing for this scene");
         UILandscape.Instance.Init(canvasPortrait, canvasLandscape, canvasWorld);
+        parentUICanvas.ClearChild();
     }
 
     public void InputLevel()

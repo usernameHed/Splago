@@ -30,6 +30,10 @@ public class PlayerManager : MonoBehaviour
         index = _index;
         Debug.Log("init player data: " + index);
         namePlayer = ExtRandom.GetRandomName();
+
+        if (GridDatas.Instance == null || GridDatas.Instance.cellsDatasPlayer.Count <= index)
+            return;
+
         spritePlayer = GridDatas.Instance.cellsDatasPlayer[index].sprite;
         colorSprite = GridDatas.Instance.cellsDatasPlayer[index].color;
     }
