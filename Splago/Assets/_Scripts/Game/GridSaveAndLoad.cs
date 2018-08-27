@@ -108,50 +108,47 @@ public class GridSaveAndLoad : MonoBehaviour
         //ici load les donnée de nameFile dans les data courante
         //string dataToLoad = "";
 
+        string content = "";
+        bool openFile = ExtFile.LoadFromResource(pathSavedMaps, ref content);
 
-        //ExtFile.Load(pathSavedMaps);
-        if (!File.Exists(pathSavedMaps))
+
+        if (!openFile)
         {
-
             Debug.LogWarning("file doesn't exist");
             return (false);
         }
 
+        string[] contentLine = content.Split('\n');
 
         int sizeXData = 0;
         int sizeYData = 0;
         ushort[,] gridData = new ushort[0, 0];
 
         int index = 0;
-        using (StreamReader sr = File.OpenText(pathSavedMaps))
+        for (int k = 0; k < contentLine.Length; k++)
         {
-            string s = "";
-
-            while ((s = sr.ReadLine()) != null)
+            //dataToLoad += s + "\n";
+            if (index == 0)
             {
+                string[] sizes = contentLine[k].Split(' ');
+                sizeXData = sizes[0].ToInt(0);
+                sizeYData = sizes[1].ToInt(0);
 
-                //dataToLoad += s + "\n";
-                if (index == 0)
-                {
-                    string [] sizes = s.Split(' ');
-                    sizeXData = sizes[0].ToInt(0);
-                    sizeYData = sizes[1].ToInt(0);
-
-                    gridData = new ushort[sizeXData, sizeYData];
-                }
-                else
-                {
-                    string[] lineDatas = s.Split(' ');
-                    for (int i = 0; i < lineDatas.Length; i++)
-                    {
-                        //Debug.Log(lineDatas[i]);
-                        gridData[i, index - 1] = (ushort)(lineDatas[i].ToInt(0));
-                    }
-                }
-
-                index++;
+                gridData = new ushort[sizeXData, sizeYData];
             }
+            else
+            {
+                string[] lineDatas = contentLine[k].Split(' ');
+                for (int i = 0; i < lineDatas.Length; i++)
+                {
+                    //Debug.Log(lineDatas[i]);
+                    gridData[i, index - 1] = (ushort)(lineDatas[i].ToInt(0));
+                }
+            }
+
+            index++;
         }
+        
         GridManager.Instance.LoadNewGrid(sizeXData, sizeYData, gridData);
         //Debug.Log(dataToLoad);
         return (true);
