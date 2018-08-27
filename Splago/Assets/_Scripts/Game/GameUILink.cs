@@ -25,6 +25,10 @@ public class GameUILink : MonoBehaviour
     private List<TextMeshProUGUI> timerPlayerUI;      //manage both UI
     [SerializeField]
     private List<TextMeshProUGUI> turnGameUI;                  //manage both UI
+    [SerializeField]
+    private List<RectTransform> redTimer;                  //manage both UI
+    [SerializeField]
+    private List<RectTransform> canvasSize;                  //manage both UI
 
     [SerializeField]
     private List<SlotUi> parentSlotNextUI;                  //manage both UI
@@ -89,6 +93,7 @@ public class GameUILink : MonoBehaviour
     public void StartNewRound()
     {
         currentPlayer = gameLoop.GetCurrentPlayer();
+
         string nameCurrentPlayer = currentPlayer.GetName();
         for (int i = 0; i < nameCurrentPlayerUI.Count; i++)
         {
@@ -157,6 +162,28 @@ public class GameUILink : MonoBehaviour
             }
         }
         //and here, update the scale !!
+        for (int i = 0; i < redTimer.Count; i++)
+        {
+            float actualPercentPlayer = gameLoop.GetTimerPlayer().GetTimer() * 100 / currentPlayer.GetTime();
+            Debug.Log("percent: " + actualPercentPlayer);
+
+            Debug.Log(canvasSize[i].sizeDelta);
+            if (i == 0)
+            {
+                float xSizeRedTime = (actualPercentPlayer * canvasSize[i].sizeDelta.x / 100);
+                redTimer[i].offsetMin = new Vector2(canvasSize[i].sizeDelta.x - xSizeRedTime, redTimer[i].sizeDelta.y);
+            }
+                
+            else
+            {
+                float ySizeRedTime = (actualPercentPlayer * canvasSize[i].sizeDelta.y / 100);
+                redTimer[i].offsetMax = new Vector2(redTimer[i].sizeDelta.x, ySizeRedTime - canvasSize[i].sizeDelta.y);
+            }
+                
+
+            //currentPlayer.GetTime() = 100;
+
+        }
     }
 
     private void Update()
