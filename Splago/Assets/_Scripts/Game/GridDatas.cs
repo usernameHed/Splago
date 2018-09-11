@@ -20,13 +20,19 @@ public struct CellData
     public Color color;
 }
 
+[Serializable]
+public struct CellsDatasPlayer
+{
+    public List<CellData> colorPlayer;
+}
+
 [TypeInfoBox("Contain data of all cells")]
 public class GridDatas : SingletonMono<GridDatas>
 {
     [Tooltip("toute les case utilisable sont ici !")]
 	public List<CellData> cellsDatas = new List<CellData>();
     [Tooltip("toute les case utilisable sont ici !")]
-    public List<CellData> cellsDatasPlayer = new List<CellData>();
+    public List<CellsDatasPlayer> cellsDatasPlayer = new List<CellsDatasPlayer>();
     [Tooltip("toute les case utilisable sont ici !")]
     public List<CellData> cellsDatasBombes = new List<CellData>();
     [Tooltip("toute les case utilisable sont ici !")]
@@ -52,9 +58,12 @@ public class GridDatas : SingletonMono<GridDatas>
         }
         for (ushort i = 0; i < cellsDatasPlayer.Count; i++)
         {
-            if (string.Equals(cellsDatasPlayer[i].name, nameCell))
+            for (int j = 0; j < cellsDatasPlayer[i].colorPlayer.Count; j++)
             {
-                return (cellsDatasPlayer[i].id);
+                if (string.Equals(cellsDatasPlayer[i].colorPlayer[j].name + cellsDatasPlayer[i].colorPlayer[j].id, nameCell))
+                {
+                    return (cellsDatasPlayer[i].colorPlayer[j].id);
+                }
             }
         }
         for (ushort i = 0; i < cellsDatasBombes.Count; i++)
@@ -76,22 +85,6 @@ public class GridDatas : SingletonMono<GridDatas>
     }
 
     /// <summary>
-    /// get get the actual id from data
-    /// </summary>
-    public ushort GetRealIdPlayer(int index)
-    {
-        for (ushort i = 0; i < cellsDatasPlayer.Count; i++)
-        {
-            if (index == i)
-            {
-                return (cellsDatasPlayer[i].id);
-            }
-        }
-        Debug.LogWarning("no player ??");
-        return (0);
-    }
-
-    /// <summary>
     /// get all list packed in one
     /// </summary>
     /// <returns></returns>
@@ -100,8 +93,13 @@ public class GridDatas : SingletonMono<GridDatas>
         List<CellData> packed = new List<CellData>();
         for (ushort i = 0; i < cellsDatas.Count; i++)
             packed.Add(cellsDatas[i]);
+
         for (ushort i = 0; i < cellsDatasPlayer.Count; i++)
-            packed.Add(cellsDatasPlayer[i]);
+        {
+            for (ushort j = 0; j < cellsDatasPlayer[i].colorPlayer.Count; j++)
+                packed.Add(cellsDatasPlayer[i].colorPlayer[j]);
+        }
+
         for (ushort i = 0; i < cellsDatasBombes.Count; i++)
             packed.Add(cellsDatasBombes[i]);
         for (ushort i = 0; i < cellsDatasMisc.Count; i++)
@@ -117,12 +115,12 @@ public class GridDatas : SingletonMono<GridDatas>
     [Button]
     private void SetIdOfData()
     {
-        List<CellData> oldSave = new List<CellData>();
+        //List<CellData> oldSave = new List<CellData>();
         List<CellData> newSave = new List<CellData>();
         ushort index = 0;
         for (ushort i = 0; i < cellsDatas.Count; i++)
         {
-            oldSave.Add(cellsDatas[i]);
+            //oldSave.Add(cellsDatas[i]);
 
             CellData cell = cellsDatas[i];
             cell.id = index;
@@ -131,9 +129,23 @@ public class GridDatas : SingletonMono<GridDatas>
             newSave.Add(cell);
             index++;
         }
+
         for (ushort i = 0; i < cellsDatasPlayer.Count; i++)
         {
-            oldSave.Add(cellsDatasPlayer[i]);
+            for (ushort j = 0; j < cellsDatasPlayer[i].colorPlayer.Count; j++)
+            {
+                CellData cell = cellsDatasPlayer[i].colorPlayer[j];
+                cell.id = index;
+                cellsDatasPlayer[i].colorPlayer[j] = cell;
+
+                newSave.Add(cell);
+                index++;
+            }
+        }
+        /*
+        for (ushort i = 0; i < cellsDatasPlayer.Count; i++)
+        {
+            //oldSave.Add(cellsDatasPlayer[i]);
 
             CellData cell = cellsDatasPlayer[i];
             cell.id = index;
@@ -142,9 +154,10 @@ public class GridDatas : SingletonMono<GridDatas>
             newSave.Add(cell);
             index++;
         }
+        */
         for (ushort i = 0; i < cellsDatasBombes.Count; i++)
         {
-            oldSave.Add(cellsDatasBombes[i]);
+            //oldSave.Add(cellsDatasBombes[i]);
 
             CellData cell = cellsDatasBombes[i];
             cell.id = index;
@@ -155,7 +168,7 @@ public class GridDatas : SingletonMono<GridDatas>
         }
         for (ushort i = 0; i < cellsDatasMisc.Count; i++)
         {
-            oldSave.Add(cellsDatasMisc[i]);
+            //oldSave.Add(cellsDatasMisc[i]);
 
             CellData cell = cellsDatasMisc[i];
             cell.id = index;
@@ -166,7 +179,7 @@ public class GridDatas : SingletonMono<GridDatas>
         }
 
         //reset loaded map
-        GridEditor.Instance.DataGridChanged(oldSave, newSave);
+        //GridEditor.Instance.DataGridChanged(oldSave, newSave);
 
 
         ////////////ici misc client
@@ -192,11 +205,16 @@ public class GridDatas : SingletonMono<GridDatas>
             if (idUnique == cellsDatas[i].id)
                 return (cellsDatas[i]);
         }
+
         for (int i = 0; i < cellsDatasPlayer.Count; i++)
         {
-            if (idUnique == cellsDatasPlayer[i].id)
-                return (cellsDatasPlayer[i]);
+            for (int j = 0; j < cellsDatasPlayer[i].colorPlayer.Count; j++)
+            {
+                if (idUnique == cellsDatasPlayer[i].colorPlayer[j].id)
+                    return (cellsDatasPlayer[i].colorPlayer[j]);
+            }
         }
+
         for (int i = 0; i < cellsDatasBombes.Count; i++)
         {
             if (idUnique == cellsDatasBombes[i].id)

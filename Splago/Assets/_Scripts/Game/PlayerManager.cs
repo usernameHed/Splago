@@ -17,8 +17,8 @@ public class PlayerManager : MonoBehaviour
     [SerializeField, ReadOnly]
     private int index;
     public int GetIndex() { return (index); }
-    private ushort realIndex;
-    public ushort GetRealIndex() { return (realIndex); }
+    //private ushort realIndex;
+    //public ushort GetRealIndex() { return (realIndex); }
     [SerializeField, ReadOnly]
     private string namePlayer;
     public string GetName() { return (namePlayer); }
@@ -34,8 +34,7 @@ public class PlayerManager : MonoBehaviour
     private int timeToAdd = 0;
 
     private bool played = false;
-    private int lastX = -1;
-    private int lastY = -1;
+    private Point lastClicked;
 
     public void Init(int _index, SpellType _spell, int _levelSpell)
     {
@@ -43,15 +42,15 @@ public class PlayerManager : MonoBehaviour
         spellType = _spell;
         levelSpell = _levelSpell;
 
-        realIndex = GridDatas.Instance.GetRealIdPlayer(index);
+        //realIndex = GridDatas.Instance.GetRealIdPlayer(index);
         Debug.Log("init player data: " + index);
         namePlayer = ExtRandom.GetRandomName();
 
         if (GridDatas.Instance == null || GridDatas.Instance.cellsDatasPlayer.Count <= index)
             return;
 
-        spritePlayer = GridDatas.Instance.cellsDatasPlayer[index].sprite;
-        colorSprite = GridDatas.Instance.cellsDatasPlayer[index].color;
+        spritePlayer = GridDatas.Instance.cellsDatasPlayer[index].colorPlayer[0].sprite;
+        colorSprite = GridDatas.Instance.cellsDatasPlayer[index].colorPlayer[0].color;
     }
 
     public float GetTime()
@@ -65,6 +64,10 @@ public class PlayerManager : MonoBehaviour
         played = false;
     }
 
+    /// <summary>
+    /// called by GameLoop only !
+    /// </summary>
+    /// <param name="timerLeft"></param>
     public void FinishRound(float timerLeft)
     {
         timeToAdd = (int)timerLeft / 2;
@@ -81,12 +84,24 @@ public class PlayerManager : MonoBehaviour
 
     public void EndPlay()
     {
-        if (!played)
+        /*if (!played)
         {
             HoverCase(lastX, lastY, false);
-        }
+        }*/
         Debug.Log("time of player " + GetName() + " over");
         played = true;
+    }
+
+    /// <summary>
+    /// level = 0 = main
+    /// 1 = hover
+    /// 2 = poison...
+    /// </summary>
+    /// <param name="level"></param>
+    /// <returns></returns>
+    public ushort GetRealIndexNumber(int level)
+    {
+        return (GridDatas.Instance.cellsDatasPlayer[index].colorPlayer[level].id);
     }
 
     /// <summary>
@@ -94,19 +109,14 @@ public class PlayerManager : MonoBehaviour
     /// </summary>
     public void HoverCase(int x, int y, bool hover)
     {
-        if (played)
-            return;
-        lastX = x;
-        lastY = y;
-
-        if (!GridManager.Instance.IsSameTypeCellAndPlayer(x, y, realIndex))
+        if (!hover)
         {
-            //Debug.Log("can't hover !!");
+            GridManager.Instance.ClearListLast();
+            lastClicked = new Point(-1, -1);
             return;
         }
-
-        Debug.Log("[player " + index + "] over " + x + ", " + y);
-        GridManager.Instance.SetSpellsHover(realIndex, spellType, levelSpell, x, y, hover);
+            
+        ClickOnCase(x, y);
     }
 
     /// <summary>
@@ -114,15 +124,32 @@ public class PlayerManager : MonoBehaviour
     /// </summary>
     public void ClickOnCase(int x, int y)
     {
-        if (!GridManager.Instance.IsSameTypeCellAndPlayer(x, y, realIndex))
+        if (played && x == lastClicked.x && y == lastClicked.y)
         {
-            Debug.Log("can't click !!");
+            Debug.Log("we click on the same !!!!");
+            GridManager.Instance.ClearListLast();
+
+            GridManager.Instance.SetSpells(this, spellType, levelSpell, x, y, 0);   //0 = definitif
+            GridManager.Instance.ClearListLast(true);
+            GameLoop.Instance.FinishRound();
+            return;
+        }
+
+        if (!GridManager.Instance.IsSameTypeCellAndPlayer(x, y, GetRealIndexNumber(0)))
+        {
+            Debug.Log("can't click !! here reset last move");
+            GridManager.Instance.ClearListLast();
+            lastClicked = new Point(-1, -1);
             return;
         }
 
         played = true;
+        lastClicked = new Point(x, y);
+
         Debug.Log("[player " + index + "] click " + x + ", " + y);
 
-        GridManager.Instance.SetSpells(realIndex, spellType, levelSpell, x, y);
+        GridManager.Instance.ClearListLast();
+
+        GridManager.Instance.SetSpells(this, spellType, levelSpell, x, y, 1);   //1 = hover
     }
 }

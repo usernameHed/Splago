@@ -34,6 +34,9 @@ public class GridManager : SingletonMono<GridManager>
     public GridScalar gridScalar;
     public GridLayoutGroup gridLayout;
 
+    private List<Point> actionPlayer = new List<Point>();
+    private List<ushort> previousActionPlayer = new List<ushort>();
+
     /// <summary>
     /// permet d'initialiser la gille (les data & l'affichage)
     /// </summary>
@@ -109,7 +112,7 @@ public class GridManager : SingletonMono<GridManager>
                 
                 if (gridData[j, i] == indexSpawn)
                 {
-                    ushort realIndexPlayer = GameLoop.Instance.GetOrderPlayer()[indexPlayer].GetRealIndex();
+                    ushort realIndexPlayer = GameLoop.Instance.GetOrderPlayer()[indexPlayer].GetRealIndexNumber(0);
                     Debug.Log("here spawn to change to index: " + indexPlayer + ", " + realIndexPlayer);
                     FillCase(j, i, realIndexPlayer);
                     indexPlayer++;
@@ -118,12 +121,27 @@ public class GridManager : SingletonMono<GridManager>
         }
     }
 
-    public void SetSpellsHover(ushort realIndex, SpellType spellType, int levelSpell, int x, int y, bool hover)
+    /// <summary>
+    /// fill old value, and clear
+    /// </summary>
+    public void ClearListLast(bool justList = false)
     {
-        
+        if (justList)
+        {
+            actionPlayer.Clear();
+            previousActionPlayer.Clear();
+            return;
+        }
+
+        for (int i = 0; i < actionPlayer.Count; i++)
+        {
+            FillCase(actionPlayer[i].x, actionPlayer[i].y, previousActionPlayer[i]);
+        }
+        actionPlayer.Clear();
+        previousActionPlayer.Clear();
     }
 
-    public void SetSpells(ushort realIndex, SpellType spellType, int levelSpell, int x, int y)
+    public void SetSpells(PlayerManager player, SpellType spellType, int levelSpell, int x, int y, int levelTypePlayer)
     {
         Debug.Log("create spell on: " + x + ", " + y);
         Spells spell = SpellsManager.Instance.GetSpellByType(spellType);
@@ -140,62 +158,43 @@ public class GridManager : SingletonMono<GridManager>
                     int realXX = (x + j) - (arraySpell.GetLength(0) / 2);
                     int realYY = (y + i) - (arraySpell.GetLength(1) / 2);
                     
-                    //Debug.Log("real x:" + realYY);
-                    //Debug.Log("real y:" + realXX);
+                    TryToSetPlayerSpellOnCell(realXX, realYY, player, levelTypePlayer);
 
-                    //TryToSetPlayerSpellOnCell(j, i, realIndex);
-                    TryToSetPlayerSpellOnCell(realXX, realYY, realIndex);
                 }
             }
         }
-
-        /*
-        int iArray = 0;
-        int jArray = 0;
-        for (int i = y - (arraySpell.GetLength(1) / 2); i < y + (arraySpell.GetLength(1) / 2); i++)   //y
-        {
-            for (int j = x - (arraySpell.GetLength(0) / 2); j < x + (arraySpell.GetLength(0) / 2); j++)   //x
-            {
-                if (i < 0 || i >= sizeY)
-                {
-                    iArray++;
-                    continue;
-                }
-                    
-                if (j < 0 || j >= sizeX)
-                {
-                    iArray++;
-                    continue;
-                }
-                    
-                Debug.Log("sizeXMAx: " + sizeX + ", sizeYMAx" + sizeY);
-                Debug.Log("x: " + j + ", y: " + i);
-                Debug.Log("real x spell: " + iArray + ", y: " + jArray);
-
-                //if we have to fill
-                if (arraySpell[iArray, jArray])
-                {
-                    //here test if we can fill on the map
-                    TryToSetPlayerSpellOnCell(j, i, realIndex);
-                }
-
-                iArray++;
-            }
-            jArray++;
-        }
-        */
     }
 
     /// <summary>
     /// is this cell other player than me ?
+    /// TODO: if we touch poison, or something else...
     /// </summary>
-    private bool IsPlayer(ushort indexPlayer)
+    private bool IsPlayer(ushort cellDataIndex)
     {
         for (int i = 0; i < GridDatas.Instance.cellsDatasPlayer.Count; i++)
         {
-            if (indexPlayer == GridDatas.Instance.cellsDatasPlayer[i].id)
+            if (cellDataIndex == GridDatas.Instance.cellsDatasPlayer[i].colorPlayer[0].id)    //tester seulement la version definitive...
             {
-                return (true); //here same player
+                return (true);  //here we have a player
+            }
+        }
+        return (false);
+    }
+
+    private bool IsSamePlayer(ushort cellDataIndex, PlayerManager playerAttacking)
+    {
+        if (!IsPlayer(cellDataIndex))
+            return (false);
+
+        for (int i = 0; i < GridDatas.Instance.cellsDatasPlayer.Count; i++)
+        {
+            if (cellDataIndex == GridDatas.Instance.cellsDatasPlayer[i].colorPlayer[0].id)    //tester seulement la version definitive...
+            {
+                if (playerAttacking.GetIndex() == i)
+                {
+                    //here same player than playerAttacking
+                    return (true);
+                }
             }
         }
         return (false);
@@ -207,7 +206,7 @@ public class GridManager : SingletonMono<GridManager>
     /// <param name="x"></param>
     /// <param name="y"></param>
     /// <param name="realIndex"></param>
-    private void TryToSetPlayerSpellOnCell(int x, int y, ushort realIndex)
+    private void TryToSetPlayerSpellOnCell(int x, int y, PlayerManager player, int levelTypePlayer)
     {
         Debug.Log("x: " + x);
         Debug.Log("y: " + y);
@@ -218,19 +217,33 @@ public class GridManager : SingletonMono<GridManager>
 
         ushort indexCase = gridData[x, y];
 
+        ushort indexToSet = player.GetRealIndexNumber(levelTypePlayer);
+
+
+
         //if the case we want to touch is a player...
         if (IsPlayer(indexCase))
         {
             //if this is our player, just rewhite
-            if (indexCase == realIndex)
+            if (IsSamePlayer(indexCase, player))
             {
-                FillCase(x, y, realIndex);
+                //FillCase(x, y, indexToSet);
                 return;
             }
             //if this is a player, but not our... create wall !!
             else
             {
-                FillCase(x, y, GridDatas.Instance.GetIdByName(GridDatas.Instance.nameWall));
+                //change wall only if definitive !!!
+                if (levelTypePlayer == 0)
+                {
+                    FillCase(x, y, GridDatas.Instance.GetIdByName(GridDatas.Instance.nameWall));
+                }
+                else if (levelTypePlayer == 1)
+                {
+                    //maybe create an other symbole on the cell ?
+                }
+
+
                 return;
             }
         }
@@ -238,7 +251,11 @@ public class GridManager : SingletonMono<GridManager>
         switch (indexCase)
         {
             case 0: //empty case
-                FillCase(x, y, realIndex);
+
+                actionPlayer.Add(new Point(x, y));
+                previousActionPlayer.Add(gridData[x, y]);
+
+                FillCase(x, y, indexToSet);
                 break;
             
             default:

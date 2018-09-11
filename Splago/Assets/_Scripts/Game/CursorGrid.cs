@@ -11,6 +11,7 @@ public class CursorGrid : MonoBehaviour
     {
         HoverSimple,
         InEditor,
+        HoverWall,
     }
 
     [Serializable]
@@ -38,6 +39,11 @@ public class CursorGrid : MonoBehaviour
 
     [SerializeField]
     private List<CursorStruct> cursors;
+
+    [SerializeField]
+    private List<CursorStruct> itemTopOfCellPrefabs;
+
+    here handle creation of cursors at certain position & destruction ?
 
     [SerializeField]
     private Transform posOfCursors;
