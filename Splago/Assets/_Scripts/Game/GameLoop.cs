@@ -65,8 +65,11 @@ public class GameLoop : SingletonMono<GameLoop>
             return;
         }
         gameUILink.Init();
+        GridManager.Instance.SpawnInit();
         StartNewRound();        
     }
+
+    
 
     /// <summary>
     /// set current player (according the the order)
@@ -93,22 +96,42 @@ public class GameLoop : SingletonMono<GameLoop>
         
         SetCurrentPlayer();
 
-        Debug.Log("Active player " + currentPlayingPlayer.GetName());
+        //Debug.Log("Active player " + currentPlayingPlayer.GetName());
         timerPlayer.StartCoolDown(currentPlayingPlayer.GetTime());
 
         playerIsPlaying = true;
 
+        currentPlayingPlayer.StartPlay();
+
         gameUILink.StartNewRound(); //init UI
+    }
+
+    /// <summary>
+    /// clicked by button
+    /// </summary>
+    public void FinishRound()
+    {
+        currentPlayingPlayer.FinishRound(GetTimerPlayer().GetTimer());
+        EndRound();
     }
 
     private void TestEndRound()
     {
         if (timerPlayer.IsStartedAndOver())
         {
-            playerIsPlaying = false;
-            Debug.Log("time of player " + currentPlayingPlayer.GetName() + " over");
-            StartNewRound();
+            currentPlayingPlayer.FinishRound(0);
+            EndRound();
         }
+    }
+
+    private void EndRound()
+    {
+        playerIsPlaying = false;
+        timerPlayer.Reset();
+
+        currentPlayingPlayer.EndPlay();
+
+        StartNewRound();
     }
 
     private void ActiveEditorMode()
@@ -122,8 +145,9 @@ public class GameLoop : SingletonMono<GameLoop>
     /// </summary>
     public void HoverCase(int x, int y, CellsBehaviour cell, bool hover)
     {
-        //Debug.Log("[game] over " + x + ", " + y);
+        
         cursor.OverCase(cell, hover);
+        currentPlayingPlayer.HoverCase(x, y, hover);
     }
 
     /// <summary>
@@ -131,7 +155,7 @@ public class GameLoop : SingletonMono<GameLoop>
     /// </summary>
     public void ClickOnCase(int x, int y)
     {
-        Debug.Log("[game] click " + x + ", " + y);
+        currentPlayingPlayer.ClickOnCase(x, y);
     }
 
     private void Update()

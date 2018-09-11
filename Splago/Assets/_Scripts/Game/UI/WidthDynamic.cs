@@ -11,6 +11,9 @@ public class WidthDynamic : MonoBehaviour
     [SerializeField]
     private RectTransform widthToAdjust;
 
+    [SerializeField]
+    private RectTransform referenceWidth;
+
     private void OnEnable()
     {
         EventManager.StartListening(GameData.Event.ResolutionChange, OnResolutionChange);
@@ -19,7 +22,7 @@ public class WidthDynamic : MonoBehaviour
     [Button]
     private void OnResolutionChange()
     {
-        float xScreen = Screen.width;
+        float xScreen = referenceWidth.sizeDelta.x;
         float percentagePanel = percentageOfScreen * xScreen / 100f;
         widthToAdjust.sizeDelta = new Vector2(percentagePanel, widthToAdjust.sizeDelta.y);
     }

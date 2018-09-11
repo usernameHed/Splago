@@ -47,7 +47,12 @@ public class GameManager : SingletonMono<GameManager>
 
     private void OnEnable()
     {
+        Init();
+    }
 
+    private void Init()
+    {
+        Application.targetFrameRate = 60;
     }
 
     /// <summary>

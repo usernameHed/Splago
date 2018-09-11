@@ -13,9 +13,9 @@ public class GridScalar : MonoBehaviour
     [SerializeField]
     private GridLayoutGroup grid;
 
-    [OnValueChanged("Init")]
+    [OnValueChanged("InitGrid")]
     public int rows = 6;
-    [OnValueChanged("Init")]
+    [OnValueChanged("InitGrid")]
     public int cols = 7;
     [OnValueChanged("Init")]
     public float spacing = 10;
@@ -25,13 +25,13 @@ public class GridScalar : MonoBehaviour
     [FoldoutGroup("World UI scale"), SerializeField]
     private RectTransform worldPanelSize;
 
-    [FoldoutGroup("World UI scale"), OnValueChanged("Init"), SerializeField]
+    [FoldoutGroup("World UI scale"), OnValueChanged("InitGrid"), SerializeField]
     private int portraitXPercentage = 95;
-    [FoldoutGroup("World UI scale"), OnValueChanged("Init"), SerializeField]
+    [FoldoutGroup("World UI scale"), OnValueChanged("InitGrid"), SerializeField]
     private int portraitYPercentage = 75;
-    [FoldoutGroup("World UI scale"), OnValueChanged("Init"), SerializeField]
+    [FoldoutGroup("World UI scale"), OnValueChanged("InitGrid"), SerializeField]
     private int landscapeXPercentage = 60;
-    [FoldoutGroup("World UI scale"), OnValueChanged("Init"), SerializeField]
+    [FoldoutGroup("World UI scale"), OnValueChanged("InitGrid"), SerializeField]
     private int landscapeYPercentage = 95;
 
     private Vector2 size = new Vector2();
@@ -48,8 +48,13 @@ public class GridScalar : MonoBehaviour
     private int paddingLeft = 0;
     private int paddingTop = 0;
 
+    private void OnEnable()
+    {
+        EventManager.StartListening(GameData.Event.ResolutionChange, InitGrid);
+    }
+
     [Button]
-    public void Init()
+    public void InitGrid()
     {
         Init(rows, cols);
     }
@@ -179,5 +184,10 @@ public class GridScalar : MonoBehaviour
         grid.cellSize = new Vector2(cellSize, cellSize);
         grid.padding.left = paddingLeft;
         grid.padding.top = paddingTop;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.StopListening(GameData.Event.ResolutionChange, InitGrid);
     }
 }

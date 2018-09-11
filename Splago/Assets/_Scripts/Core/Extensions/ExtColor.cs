@@ -30,4 +30,14 @@ public static class ExtColor
     {
         return new Color(color.r, color.g, color.b, alpha);
     }
+
+    /// <summary>
+    /// get a pure random color
+    /// </summary>
+    /// <returns></returns>
+    public static Color GetRandomColor()
+    {
+        Color randomColor = new Color(UnityEngine.Random.Range(0.0f, 1.0f), UnityEngine.Random.Range(0.0f, 1.0f), UnityEngine.Random.Range(0.0f, 1.0f), 1);
+        return (randomColor);
+    }
 }

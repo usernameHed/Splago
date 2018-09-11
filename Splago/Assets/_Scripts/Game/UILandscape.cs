@@ -58,7 +58,7 @@ public class UILandscape : SingletonMono<UILandscape>
 
     private void ChangeOrientation()
     {
-        EventManager.TriggerEvent(GameData.Event.ResolutionChange);
+        
 
         if (!portrait || !landscape)
             return;
@@ -86,6 +86,8 @@ public class UILandscape : SingletonMono<UILandscape>
 
         rtUiWorld.sizeDelta = new Vector2(Screen.width, Screen.height);
         GameManager.Instance.CameraMain.orthographicSize = Screen.height / (2 * 1 );
-        GridManager.Instance.gridScalar.Init();
+
+        EventManager.TriggerEvent(GameData.Event.ResolutionChange);
+        //GridManager.Instance.gridScalar.Init();
     }
 }

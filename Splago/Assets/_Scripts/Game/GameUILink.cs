@@ -21,8 +21,12 @@ public class GameUILink : MonoBehaviour
     private List<TextMeshProUGUI> nameCurrentPlayerUI;      //manage both UI
     [SerializeField]
     private List<Image> currentImagePlayerUI;      //manage both UI
+
     [SerializeField]
     private List<TextMeshProUGUI> timerPlayerUI;      //manage both UI
+    [SerializeField]
+    private List<GameObject> timerPlayerFinishTurn;      //manage both UI
+
     [SerializeField]
     private List<TextMeshProUGUI> turnGameUI;                  //manage both UI
     [SerializeField]
@@ -35,6 +39,9 @@ public class GameUILink : MonoBehaviour
 
     [SerializeField, ReadOnly]
     private int timerPlayer = 99;
+
+    [SerializeField]
+    private int hotTimer = 5;
 
     private GameLoop gameLoop;
     private PlayerManager currentPlayer;
@@ -159,15 +166,25 @@ public class GameUILink : MonoBehaviour
             for (int i = 0; i < timerPlayerUI.Count; i++)
             {
                 timerPlayerUI[i].text = timerPlayer.ToString();
+                if (timerPlayer <= hotTimer)
+                {
+                    timerPlayerUI[i].gameObject.SetActive(true);
+                    timerPlayerFinishTurn[i].gameObject.SetActive(false);
+                }
+                else
+                {
+                    timerPlayerUI[i].gameObject.SetActive(false);
+                    timerPlayerFinishTurn[i].gameObject.SetActive(true);
+                }
             }
         }
         //and here, update the scale !!
         for (int i = 0; i < redTimer.Count; i++)
         {
             float actualPercentPlayer = gameLoop.GetTimerPlayer().GetTimer() * 100 / currentPlayer.GetTime();
-            Debug.Log("percent: " + actualPercentPlayer);
+            //Debug.Log("percent: " + actualPercentPlayer);
 
-            Debug.Log(canvasSize[i].sizeDelta);
+            //Debug.Log(canvasSize[i].sizeDelta);
             if (i == 0)
             {
                 float xSizeRedTime = (actualPercentPlayer * canvasSize[i].sizeDelta.x / 100);

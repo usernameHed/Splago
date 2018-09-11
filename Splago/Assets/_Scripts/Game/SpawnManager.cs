@@ -28,7 +28,8 @@ public class SpawnManager : SingletonMono<SpawnManager>
         {
             GameObject player = Instantiate(playerPrefabs, parentPlayer);
             PlayerManager playerScript = player.GetComponent<PlayerManager>();
-            playerScript.Init(i);
+
+            playerScript.Init(i, (SpellType)i, 2);
             playerManagers.Add(playerScript);
         }
     }

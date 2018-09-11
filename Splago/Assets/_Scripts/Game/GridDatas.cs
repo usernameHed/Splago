@@ -32,9 +32,64 @@ public class GridDatas : SingletonMono<GridDatas>
     [Tooltip("toute les case utilisable sont ici !")]
     public List<CellData> cellsDatasMisc = new List<CellData>();
 
+    public string nameSpawn = "Spawn";
+    public string nameWall = "Wall";
 
     [Tooltip("les cases non savable, mais utilisable par le client")]
     public List<CellData> cellVisualMisc = new List<CellData>();
+
+    /// <summary>
+    /// is this ID a spawn ?
+    /// </summary>
+    public ushort GetIdByName(string nameCell)
+    {
+        for (ushort i = 0; i < cellsDatas.Count; i++)
+        {
+            if (string.Equals(cellsDatas[i].name, nameCell))
+            {
+                return (cellsDatas[i].id);
+            }
+        }
+        for (ushort i = 0; i < cellsDatasPlayer.Count; i++)
+        {
+            if (string.Equals(cellsDatasPlayer[i].name, nameCell))
+            {
+                return (cellsDatasPlayer[i].id);
+            }
+        }
+        for (ushort i = 0; i < cellsDatasBombes.Count; i++)
+        {
+            if (string.Equals(cellsDatasBombes[i].name, nameCell))
+            {
+                return (cellsDatasBombes[i].id);
+            }
+        }
+        for (ushort i = 0; i < cellsDatasMisc.Count; i++)
+        {
+            if (string.Equals(cellsDatasMisc[i].name, nameCell))
+            {
+                return (cellsDatasMisc[i].id);
+            }
+        }
+        Debug.LogWarning("NOT FINDED");
+        return (0);
+    }
+
+    /// <summary>
+    /// get get the actual id from data
+    /// </summary>
+    public ushort GetRealIdPlayer(int index)
+    {
+        for (ushort i = 0; i < cellsDatasPlayer.Count; i++)
+        {
+            if (index == i)
+            {
+                return (cellsDatasPlayer[i].id);
+            }
+        }
+        Debug.LogWarning("no player ??");
+        return (0);
+    }
 
     /// <summary>
     /// get all list packed in one
