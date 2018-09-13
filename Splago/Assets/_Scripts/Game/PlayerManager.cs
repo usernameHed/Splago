@@ -9,9 +9,9 @@ public class PlayerManager : MonoBehaviour
     [SerializeField]
     private float time = 30f;
 
-    [ReadOnly]
+    //[ReadOnly]
     public SpellType spellType;
-    [ReadOnly]
+    //[ReadOnly]
     public int levelSpell = 2;
 
     [SerializeField, ReadOnly]
