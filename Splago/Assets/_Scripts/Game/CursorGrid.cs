@@ -43,7 +43,8 @@ public class CursorGrid : MonoBehaviour
     [SerializeField]
     private List<CursorStruct> itemTopOfCellPrefabs;
 
-    here handle creation of cursors at certain position & destruction ?
+    //TODO
+    //here handle creation of cursors at certain position & destruction ?
 
     [SerializeField]
     private Transform posOfCursors;

@@ -35,6 +35,7 @@ public class PlayerManager : MonoBehaviour
 
     private bool played = false;
     private Point lastClicked;
+    private bool clickedOnce = false;       //click 2 times to validate !!
 
     public void Init(int _index, SpellType _spell, int _levelSpell)
     {
@@ -66,6 +67,7 @@ public class PlayerManager : MonoBehaviour
 
     /// <summary>
     /// called by GameLoop only !
+    /// only when a round is over
     /// </summary>
     /// <param name="timerLeft"></param>
     public void FinishRound(float timerLeft)
@@ -82,13 +84,15 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// called when the player finish his turn
+    /// </summary>
     public void EndPlay()
     {
-        /*if (!played)
-        {
-            HoverCase(lastX, lastY, false);
-        }*/
         Debug.Log("time of player " + GetName() + " over");
+
+        ValidateAtEndRound();
+
         played = true;
     }
 
@@ -111,38 +115,99 @@ public class PlayerManager : MonoBehaviour
     {
         if (!hover)
         {
+            //if we have clicked one time, don't reset !!
+            if (clickedOnce)
+                return;
+
             GridManager.Instance.ClearListLast();
             lastClicked = new Point(-1, -1);
             return;
         }
             
-        ClickOnCase(x, y);
+        ClickOnCase(x, y, false);
+    }
+
+    /// <summary>
+    /// when time is running out, and we have clicked only once, reset
+    /// </summary>
+    private void ValidateAtEndRound()
+    {
+        if (!clickedOnce)
+        {
+            Debug.Log("ici si just hover ??");
+            ResetClickOnce();
+            return;
+        }
+            
+
+        //simulate a click at the end of turn
+        ClickOnCase(lastClicked.x, lastClicked.y, true, true);
+    }
+
+    /// <summary>
+    /// when time is running out, and we have clicked only once, reset
+    /// </summary>
+    private void ResetClickOnce()
+    {
+        GridManager.Instance.ClearListLast();
+        lastClicked = new Point(-1, -1);
+        clickedOnce = false;
     }
 
     /// <summary>
     /// the player clic on this case
     /// </summary>
-    public void ClickOnCase(int x, int y)
+    public void ClickOnCase(int x, int y, bool fromClick = true, bool fromEndRound = false)
     {
         if (played && x == lastClicked.x && y == lastClicked.y)
         {
+            if (!clickedOnce)
+            {
+                clickedOnce = true;
+                ClickButDoHover(x, y);
+                return;
+            }
+
+            
+
             Debug.Log("we click on the same !!!!");
             GridManager.Instance.ClearListLast();
 
             GridManager.Instance.SetSpells(this, spellType, levelSpell, x, y, 0);   //0 = definitif
             GridManager.Instance.ClearListLast(true);
-            GameLoop.Instance.FinishRound();
+
+            //finish round only if not already finished
+            if (!fromEndRound)
+                GameLoop.Instance.FinishRound();
             return;
         }
 
         if (!GridManager.Instance.IsSameTypeCellAndPlayer(x, y, GetRealIndexNumber(0)))
         {
+            
+
+            //if we have clicked one time, don't reset !!
+            //only if we are on over
+            if (clickedOnce && !fromClick)
+                return;
+
             Debug.Log("can't click !! here reset last move");
+
             GridManager.Instance.ClearListLast();
             lastClicked = new Point(-1, -1);
+            clickedOnce = false;
             return;
         }
+        clickedOnce = false;
 
+        ClickButDoHover(x, y);
+    }
+
+    /// <summary>
+    /// here we are just hover a cells
+    /// </summary>
+    private void ClickButDoHover(int x, int y)
+    {
         played = true;
         lastClicked = new Point(x, y);
 

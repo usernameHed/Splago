@@ -18,7 +18,8 @@ public class CellsBehaviour : MonoBehaviour
     [ShowInInspector, ReadOnly]
     private CellData gridData;
 
-    here create cross where we already click...
+    //TODO:
+    //here create cross where we already click...
 
     public void Init(int x, int y, CellData grid)
     {
