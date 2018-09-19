@@ -6,6 +6,22 @@ using UnityEngine;
 
 public static class ExtTransform
 {
+    /// <summary>
+    /// get real pos world of rect transform ??
+    /// </summary>
+    public static Rect GetWorldRect(RectTransform rt, Vector2 scale)
+    {
+        // Convert the rectangle to world corners and grab the top left
+        Vector3[] corners = new Vector3[4];
+        rt.GetWorldCorners(corners);
+        Vector3 topLeft = corners[0];
+
+        // Rescale the size appropriately based on the current Canvas scale
+        Vector2 scaledSize = new Vector2(scale.x * rt.rect.size.x, scale.y * rt.rect.size.y);
+
+        return new Rect(topLeft, scaledSize);
+    }
+
     public static RectTransform ResetPos(this RectTransform transform)
     {
         transform.localPosition = Vector3.zero;

@@ -6,7 +6,15 @@ using UnityEngine;
 public class WidthDynamic : MonoBehaviour
 {
     [SerializeField]
-    private float percentageOfScreen = 30f;
+    private float percentageOfScreenX = 30f;
+    [SerializeField]
+    private bool useX = false;
+
+    [SerializeField]
+    private float percentageY = 0f;
+    [SerializeField]
+    private bool useY = false;
+
 
     [SerializeField]
     private RectTransform widthToAdjust;
@@ -23,8 +31,10 @@ public class WidthDynamic : MonoBehaviour
     private void OnResolutionChange()
     {
         float xScreen = referenceWidth.sizeDelta.x;
-        float percentagePanel = percentageOfScreen * xScreen / 100f;
-        widthToAdjust.sizeDelta = new Vector2(percentagePanel, widthToAdjust.sizeDelta.y);
+        float yScreen = referenceWidth.sizeDelta.y;
+        float percentagePanelX = (useX) ? percentageOfScreenX * xScreen / 100f : widthToAdjust.sizeDelta.x;
+        float percentagePanelY = (useY) ? percentageY * yScreen / 100f : widthToAdjust.sizeDelta.y;
+        widthToAdjust.sizeDelta = new Vector2(percentagePanelX, percentagePanelY);
     }
 
     private void OnDisable()
