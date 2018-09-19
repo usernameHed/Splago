@@ -155,6 +155,15 @@ public class PlayerManager : MonoBehaviour
     }
 
     /// <summary>
+    /// here if we already clicked here, do nothing
+    /// </summary>
+    private bool IsAlreadyClicked(int x, int y)
+    {
+        CellsBehaviour _cell = GridManager.Instance.GetCell(x, y);
+        return (_cell.isClicked);
+    }
+
+    /// <summary>
     /// the player clic on this case
     /// </summary>
     public void ClickOnCase(int x, int y, bool fromClick = true, bool fromEndRound = false)
@@ -176,6 +185,13 @@ public class PlayerManager : MonoBehaviour
             GridManager.Instance.SetSpells(this, spellType, levelSpell, x, y, 0);   //0 = definitif
             GridManager.Instance.ClearListLast(true);
 
+            GameLoop.Instance.cursor.AddToCell(x, y, "PlayerClicked");
+
+            CellsBehaviour _cell = GridManager.Instance.GetCell(x, y);
+            _cell.isClicked = true;
+
+
+
             //finish round only if not already finished
             if (!fromEndRound)
                 GameLoop.Instance.FinishRound();
@@ -191,7 +207,7 @@ public class PlayerManager : MonoBehaviour
             if (clickedOnce && !fromClick)
                 return;
 
-            Debug.Log("can't click !! here reset last move");
+            //Debug.Log("can't click !! here reset last move");
 
             GridManager.Instance.ClearListLast();
             lastClicked = new Point(-1, -1);
@@ -208,6 +224,12 @@ public class PlayerManager : MonoBehaviour
     /// </summary>
     private void ClickButDoHover(int x, int y)
     {
+        if (IsAlreadyClicked(x, y))
+        {
+            Debug.Log("here we have already clicked on that one !");
+            return;
+        }
+
         played = true;
         lastClicked = new Point(x, y);
 

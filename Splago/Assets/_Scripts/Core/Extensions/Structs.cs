@@ -1,5 +1,5 @@
 ﻿
-struct Point
+public struct Point
 {
     public int x, y;
     public Point(int px, int py)

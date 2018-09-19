@@ -35,7 +35,10 @@ public class GridManager : SingletonMono<GridManager>
     public GridLayoutGroup gridLayout;
 
     private List<Point> actionPlayer = new List<Point>();
+    private List<Point> actionSpecialPlayer = new List<Point>();
+
     private List<ushort> previousActionPlayer = new List<ushort>();
+    private List<ushort> previousSpecialActionPlayer = new List<ushort>();
 
     /// <summary>
     /// permet d'initialiser la gille (les data & l'affichage)
@@ -130,20 +133,32 @@ public class GridManager : SingletonMono<GridManager>
         {
             actionPlayer.Clear();
             previousActionPlayer.Clear();
+
+            actionSpecialPlayer.Clear();
+            previousSpecialActionPlayer.Clear();
             return;
         }
 
         for (int i = 0; i < actionPlayer.Count; i++)
         {
             FillCase(actionPlayer[i].x, actionPlayer[i].y, previousActionPlayer[i]);
+            
         }
+        for (int i = 0; i < actionSpecialPlayer.Count; i++)
+        {
+            GameLoop.Instance.cursor.DeleteCell(actionSpecialPlayer[i].x, actionSpecialPlayer[i].y, "WallHover");
+        }
+
         actionPlayer.Clear();
         previousActionPlayer.Clear();
+        actionSpecialPlayer.Clear();
+        previousSpecialActionPlayer.Clear();
     }
 
     public void SetSpells(PlayerManager player, SpellType spellType, int levelSpell, int x, int y, int levelTypePlayer)
     {
         Debug.Log("create spell on: " + x + ", " + y);
+
         Spells spell = SpellsManager.Instance.GetSpellByType(spellType);
         bool[,] arraySpell = spell.GetLevel(levelSpell);
 
@@ -158,8 +173,10 @@ public class GridManager : SingletonMono<GridManager>
                     int realXX = (x + j) - (arraySpell.GetLength(0) / 2);
                     int realYY = (y + i) - (arraySpell.GetLength(1) / 2);
                     
-                    TryToSetPlayerSpellOnCell(realXX, realYY, player, levelTypePlayer);
-
+                    if (TryToSetPlayerSpellOnCell(realXX, realYY, player, levelTypePlayer))
+                    {
+                        
+                    }
                 }
             }
         }
@@ -206,14 +223,14 @@ public class GridManager : SingletonMono<GridManager>
     /// <param name="x"></param>
     /// <param name="y"></param>
     /// <param name="realIndex"></param>
-    private void TryToSetPlayerSpellOnCell(int x, int y, PlayerManager player, int levelTypePlayer)
+    private bool TryToSetPlayerSpellOnCell(int x, int y, PlayerManager player, int levelTypePlayer)
     {
-        Debug.Log("x: " + x);
-        Debug.Log("y: " + y);
+        //Debug.Log("x: " + x);
+        //Debug.Log("y: " + y);
         if (x < 0 || x >= sizeX)
-            return;
+            return (false);
         if (y < 0 || y >= sizeY)
-            return;
+            return (false);
 
         ushort indexCase = gridData[x, y];
 
@@ -228,7 +245,7 @@ public class GridManager : SingletonMono<GridManager>
             if (IsSamePlayer(indexCase, player))
             {
                 //FillCase(x, y, indexToSet);
-                return;
+                return (false);
             }
             //if this is a player, but not our... create wall !!
             else
@@ -237,14 +254,19 @@ public class GridManager : SingletonMono<GridManager>
                 if (levelTypePlayer == 0)
                 {
                     FillCase(x, y, GridDatas.Instance.GetIdByName(GridDatas.Instance.nameWall));
+                    return (true);
                 }
                 else if (levelTypePlayer == 1)
                 {
                     //maybe create an other symbole on the cell ?
+                    GameLoop.Instance.cursor.AddToCell(x, y, "WallHover");
+
+                    actionSpecialPlayer.Add(new Point(x, y));
+                    previousSpecialActionPlayer.Add(GridDatas.Instance.GetIdByName("WallHover"));
                 }
 
 
-                return;
+                return (false);
             }
         }
 
@@ -262,6 +284,7 @@ public class GridManager : SingletonMono<GridManager>
                 //do nothing
                 break;
         }
+        return (false);
     }
 
     /// <summary>
@@ -294,7 +317,15 @@ public class GridManager : SingletonMono<GridManager>
     public void FillCase(int x, int y, ushort data)
     {
         gridData[x, y] = data;
-        CellsBehaviour cellBehave = gridcells[x, y].GetComponent<CellsBehaviour>();
+        CellsBehaviour cellBehave = GetCell(x, y);
         cellBehave.Init(x, y, GridDatas.Instance.GetCellsByData(data));
+    }
+
+    /// <summary>
+    /// return cell with x, y
+    /// </summary>
+    public CellsBehaviour GetCell(int x, int y)
+    {
+        return (gridcells[x, y].GetComponent<CellsBehaviour>());
     }
 }

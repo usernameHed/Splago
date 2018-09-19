@@ -80,6 +80,13 @@ public class GridDatas : SingletonMono<GridDatas>
                 return (cellsDatasMisc[i].id);
             }
         }
+        for (ushort i = 0; i < cellVisualMisc.Count; i++)
+        {
+            if (string.Equals(cellVisualMisc[i].name, nameCell))
+            {
+                return (cellVisualMisc[i].id);
+            }
+        }
         Debug.LogWarning("NOT FINDED");
         return (0);
     }
@@ -224,6 +231,11 @@ public class GridDatas : SingletonMono<GridDatas>
         {
             if (idUnique == cellsDatasMisc[i].id)
                 return (cellsDatasMisc[i]);
+        }
+        for (int i = 0; i < cellVisualMisc.Count; i++)
+        {
+            if (idUnique == cellVisualMisc[i].id)
+                return (cellVisualMisc[i]);
         }
 
         Debug.LogWarning("Cell not found !");
