@@ -254,6 +254,7 @@ public class GridManager : SingletonMono<GridManager>
                 if (levelTypePlayer == 0)
                 {
                     FillCase(x, y, GridDatas.Instance.GetIdByName(GridDatas.Instance.nameWall));
+                    GameLoop.Instance.cursor.DeleteCell(x, y, "PlayerClicked");
                     return (true);
                 }
                 else if (levelTypePlayer == 1)

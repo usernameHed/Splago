@@ -177,7 +177,13 @@ public class PlayerManager : MonoBehaviour
                 return;
             }
 
-            
+            if (IsAlreadyClicked(x, y))
+            {
+                Debug.Log("here we have already clicked on that one !");
+                return;
+            }
+
+
 
             Debug.Log("we click on the same !!!!");
             GridManager.Instance.ClearListLast();

@@ -66,14 +66,21 @@ public class CellsBehaviour : MonoBehaviour
     public void DeleteToCell(int x, int y, ushort id, bool all = false)
     {
         Debug.Log("try to delete id: " + id + ",(" + x + " " + y + ")");
+        bool done = false;
         foreach (Transform child in GetParentCell())
         {
             if (child.GetComponent<CellsId>()
                 && child.GetComponent<CellsId>().GetId() == id)
             {
                 childHover.Remove(child.GetComponent<CellsId>());
-                Destroy(child.gameObject);
-                return;
+                if (!done)
+                {
+                    Destroy(child.gameObject);
+                    done = true;
+                }
+
+                if (!all)
+                    return;
             }
             //Something(child.gameObject);
         }
