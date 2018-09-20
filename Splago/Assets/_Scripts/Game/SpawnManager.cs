@@ -8,6 +8,9 @@ public class SpawnManager : SingletonMono<SpawnManager>
     private int numberPlayer = 2;
 
     [SerializeField]
+    private int LevelSpellForTesting = 2;
+
+    [SerializeField]
     private Transform parentPlayer;
     [SerializeField]
     private GameObject playerPrefabs;
@@ -29,7 +32,7 @@ public class SpawnManager : SingletonMono<SpawnManager>
             GameObject player = Instantiate(playerPrefabs, parentPlayer);
             PlayerManager playerScript = player.GetComponent<PlayerManager>();
 
-            playerScript.Init(i, (SpellType)i, 2);
+            playerScript.Init(i, SpellsManager.Instance.GetRandomSpells(playerScript.gameObject), LevelSpellForTesting);
             playerManagers.Add(playerScript);
         }
     }

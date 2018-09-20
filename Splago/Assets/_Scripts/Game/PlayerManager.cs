@@ -10,9 +10,7 @@ public class PlayerManager : MonoBehaviour
     private float time = 30f;
 
     //[ReadOnly]
-    public SpellType spellType;
-    //[ReadOnly]
-    public int levelSpell = 2;
+    public int spellIndex;
 
     [SerializeField, ReadOnly]
     private int index;
@@ -33,15 +31,18 @@ public class PlayerManager : MonoBehaviour
     [ShowInInspector, ReadOnly]
     private int timeToAdd = 0;
 
+    [ReadOnly]
+    public List<Spells> spellsPlayer;
+
     private bool played = false;
     private Point lastClicked;
     private bool clickedOnce = false;       //click 2 times to validate !!
 
-    public void Init(int _index, SpellType _spell, int _levelSpell)
+    public void Init(int _index, List<Spells> _spell, int _levelSpell)
     {
         index = _index;
-        spellType = _spell;
-        levelSpell = _levelSpell;
+        spellsPlayer = _spell;
+        SetTypeSpell(spellsPlayer[0]);    //set the first type
 
         //realIndex = GridDatas.Instance.GetRealIdPlayer(index);
         Debug.Log("init player data: " + index);
@@ -54,6 +55,29 @@ public class PlayerManager : MonoBehaviour
         colorSprite = GridDatas.Instance.cellsDatasPlayer[index].colorPlayer[0].color;
     }
 
+    public Spells GetSpellSelected()
+    {
+        return (spellsPlayer[spellIndex]);
+    }
+
+    /// <summary>
+    /// set a new spell type !
+    /// </summary>
+    /// <param name="indexSpell"></param>
+    public void SetTypeSpell(Spells spellClicked)
+    {
+        for (int i = 0; i < spellsPlayer.Count; i++)
+        {
+            if (spellClicked == spellsPlayer[i])
+            {
+                spellIndex = i;
+                break;
+            }
+        }
+
+        ResetClickOnce();   //reset if we have clicked !
+    }
+
     public float GetTime()
     {
         return (time + timeToAdd);
@@ -63,6 +87,12 @@ public class PlayerManager : MonoBehaviour
     {
         Debug.Log("Active player " + GetName());
         played = false;
+    }
+
+    public void PlayerSetSpellAndBonusList()
+    {
+        spellsPlayer.Clear();
+
     }
 
     /// <summary>
@@ -149,6 +179,7 @@ public class PlayerManager : MonoBehaviour
     /// </summary>
     private void ResetClickOnce()
     {
+        //Debug.Log("reset " + namePlayer);
         GridManager.Instance.ClearListLast();
         lastClicked = new Point(-1, -1);
         clickedOnce = false;
@@ -188,7 +219,7 @@ public class PlayerManager : MonoBehaviour
             Debug.Log("we click on the same !!!!");
             GridManager.Instance.ClearListLast();
 
-            GridManager.Instance.SetSpells(this, spellType, levelSpell, x, y, 0);   //0 = definitif
+            GridManager.Instance.SetSpells(this, GetSpellSelected().spellType, GetSpellSelected().levelSpell, x, y, 0);   //0 = definitif
             GridManager.Instance.ClearListLast(true);
 
             GameLoop.Instance.cursor.AddToCell(x, y, "PlayerClicked");
@@ -243,6 +274,6 @@ public class PlayerManager : MonoBehaviour
 
         GridManager.Instance.ClearListLast();
 
-        GridManager.Instance.SetSpells(this, spellType, levelSpell, x, y, 1);   //1 = hover
+        GridManager.Instance.SetSpells(this, GetSpellSelected().spellType, GetSpellSelected().levelSpell, x, y, 1);   //1 = hover
     }
 }

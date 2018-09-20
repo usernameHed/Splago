@@ -160,7 +160,7 @@ public class GridManager : SingletonMono<GridManager>
         Debug.Log("create spell on: " + x + ", " + y);
 
         Spells spell = SpellsManager.Instance.GetSpellByType(spellType);
-        bool[,] arraySpell = spell.GetLevel(levelSpell);
+        bool[,] arraySpell = spell.GetLevelForArray(levelSpell);
 
         
         for (int i = 0; i < arraySpell.GetLength(1); i++)   //y

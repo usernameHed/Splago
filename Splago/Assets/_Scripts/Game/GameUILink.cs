@@ -37,6 +37,9 @@ public class GameUILink : MonoBehaviour
     [SerializeField]
     private List<SlotUi> parentSlotNextUI;                  //manage both UI
 
+    [SerializeField]
+    private List<SpellListUI> spellListUI;                  //manage both UI
+
     [SerializeField, ReadOnly]
     private int timerPlayer = 99;
 
@@ -112,6 +115,11 @@ public class GameUILink : MonoBehaviour
             currentImagePlayerUI[i].color = currentPlayer.GetColorPlayer();
         }
         DisplayNextUI();
+
+        for (int i = 0; i < spellListUI.Count; i++)
+        {
+            spellListUI[i].Init(currentPlayer);
+        }
     }
 
     /// <summary>
